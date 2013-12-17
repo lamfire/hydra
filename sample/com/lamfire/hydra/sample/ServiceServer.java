@@ -17,7 +17,7 @@ public class ServiceServer {
 			}
 			
 		});
-		Snake executor = new IdentityService(mapper,host, port);
+		Snake executor = new IdentitySnake(mapper,host, port);
 		executor.connect();
 	}
 	

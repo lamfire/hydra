@@ -24,7 +24,7 @@ public class BroadcastEchoServer {
 			}
 			
 		});
-		executor = new IdentityService(mapper,host, port);
+		executor = new IdentitySnake(mapper,host, port);
 		executor.bind();
 	}
 	

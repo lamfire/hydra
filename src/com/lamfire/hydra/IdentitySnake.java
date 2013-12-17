@@ -1,10 +1,10 @@
 package com.lamfire.hydra;
 
 
-public class IdentityService extends Snake {
+public class IdentitySnake extends Snake {
 	private MessageMapper mapper;
 	
-	public IdentityService(MessageMapper mapper, String host, int port) {
+	public IdentitySnake(MessageMapper mapper, String host, int port) {
 		super(host, port);
 		this.mapper = mapper;
 	}

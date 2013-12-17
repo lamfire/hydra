@@ -20,7 +20,7 @@ public class EchoCli {
 			}
 		});
 		
-		final Snake executor = new IdentityService(mapper,host, port);
+		final Snake executor = new IdentitySnake(mapper,host, port);
 		executor.setKeepaliveConnsWithClient(size);
 
 		

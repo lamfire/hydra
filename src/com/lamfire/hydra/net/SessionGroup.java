@@ -158,9 +158,15 @@ public class SessionGroup implements Iterable<Session>{
                 if(this.iterator.hasNext()){
                     return this.iterator.next();
                 }
-                return null;
+                this.iterator = iterator();
+                if(!this.iterator.hasNext()){
+                    return null;
+                }
             }catch (Throwable e){
                 this.iterator = iterator();
+                if(!this.iterator.hasNext()){
+                    return null;
+                }
             }
             return next();
         } finally {

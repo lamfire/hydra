@@ -35,11 +35,17 @@ public class SessionGroup implements Iterable<Session>{
 			Channel channel = s.getChannel();
 			int sessionId = s.getSessionId();
 
+            //exists?
+            if(keyMap.containsKey(key)){
+                remove(key);
+            }
+
+            idMap.put(key, sessionId);
+            keyMap.put(sessionId, key);
+
 			if (!sessionMap.containsKey(sessionId)) {
 				sessionMap.put(sessionId, s);
 				channel.getCloseFuture().addListener(remover);
-				idMap.put(key, sessionId);
-				keyMap.put(sessionId, key);
 				return true;
 			}
 		} finally {

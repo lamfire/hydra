@@ -65,17 +65,7 @@
     <favorites_list name="hydra" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="SessionGroup.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="163" column="20" selection-start="3941" selection-end="3941" vertical-scroll-proportion="0.6225166">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -168,16 +158,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="hydra" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -460,7 +440,11 @@
       <created>1389094899043</created>
       <updated>1389094899043</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="SessionGroup implements iterator">
+      <created>1389097617629</created>
+      <updated>1389097617629</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -632,7 +616,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="20" selection-start="3941" selection-end="3941" vertical-scroll-proportion="0.6225166">
+        <state line="81" column="53" selection-start="2226" selection-end="2226" vertical-scroll-proportion="1.0662252">
           <folding />
         </state>
       </provider>

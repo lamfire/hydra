@@ -9,16 +9,16 @@ import com.lamfire.hydra.exception.NotSupportedMethodException;
 import com.lamfire.hydra.net.Session;
 
 public class CycleSessionIterator implements Iterator<Session>{
-	private Hydra river;
+	private Hydra hydra;
 	private final Queue<Session> queue = new ConcurrentLinkedQueue<Session>();
 	
-	public CycleSessionIterator(Hydra river){
-		this.river = river;
+	public CycleSessionIterator(Hydra hydra){
+		this.hydra = hydra;
 	}
 	
 	private synchronized Session nextSession(){
 		if(queue.isEmpty()){
-			Collection<Session> sessions = river.getSessions();
+			Collection<Session> sessions = hydra.getSessions();
 			if(sessions == null || sessions.isEmpty()){
 				return null;
 			}
@@ -35,7 +35,7 @@ public class CycleSessionIterator implements Iterator<Session>{
 		int count = 0;
         while(session == null || !session.isConnected()){
         	session = nextSession();
-            if(count >= river.getSessions().size()){
+            if(count >= hydra.getSessions().size()){
                 return null;
             }
         }
@@ -44,7 +44,7 @@ public class CycleSessionIterator implements Iterator<Session>{
 
 	@Override
 	public boolean hasNext() {
-		Collection<Session> sessions = river.getSessions();
+		Collection<Session> sessions = hydra.getSessions();
 		if(sessions == null){
 			return false;
 		}

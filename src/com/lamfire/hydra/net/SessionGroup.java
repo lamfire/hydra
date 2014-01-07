@@ -1,10 +1,7 @@
 package com.lamfire.hydra.net;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -16,17 +13,19 @@ import org.jboss.netty.channel.ChannelFutureListener;
 
 import com.lamfire.utils.Sets;
 
-public class SessionGroup {
+public class SessionGroup implements Iterable<Session>{
 	private final Lock lock = new ReentrantLock();
 	private final Map<Integer, Session> sessionMap = new ConcurrentHashMap<Integer, Session>();
 	private final Map<Serializable, Integer> idMap = new HashMap<Serializable, Integer>();
 	private final Map<Integer, Serializable> keyMap = new HashMap<Integer, Serializable>();
+    private Iterator<Session> iterator;
 
 	private final ChannelFutureListener remover = new ChannelFutureListener() {
 		public void operationComplete(ChannelFuture future) throws Exception {
 			int sessionId = future.getChannel().getId();
 			Serializable key = keyMap.get(sessionId);
 			remove(key);
+            iterator = iterator();
 		}
 	};
 
@@ -45,6 +44,7 @@ public class SessionGroup {
 			}
 		} finally {
 			lock.unlock();
+            iterator = iterator();
 		}
 
 		return false;
@@ -90,6 +90,7 @@ public class SessionGroup {
 			return s;
 		} finally {
 			lock.unlock();
+            iterator = iterator();
 		}
 	}
 
@@ -143,4 +144,27 @@ public class SessionGroup {
 	public boolean existsSession(int sessionId) {
 		return keyMap.containsKey(sessionId);
 	}
+
+    @Override
+    public Iterator<Session> iterator() {
+        return sessionMap.values().iterator();
+    }
+
+
+    public synchronized Session next(){
+        lock.lock();
+        try {
+            try{
+                if(this.iterator.hasNext()){
+                    return this.iterator.next();
+                }
+                return null;
+            }catch (Throwable e){
+                this.iterator = iterator();
+            }
+            return next();
+        } finally {
+            lock.unlock();
+        }
+    }
 }

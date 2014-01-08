@@ -24,7 +24,7 @@ public class PollerDestination extends Destination {
 		}
 		
 		if(!it.hasNext()){
-			LOGGER.error("Not found alived 'Comsumer', from " + getName());
+			LOGGER.error("Not found available 'Destination', from " + getName());
 			return;
 		}
 		

@@ -7,8 +7,8 @@ import com.lamfire.hydra.net.Context;
 import com.lamfire.hydra.net.Session;
 
 /**
- * 执行者
- * 负责创建消息或者消费消息
+ * 蛇
+ * 当网络通信建立起来后，负责创建消息或者消费消息
  * @author lamfire
  *
  */

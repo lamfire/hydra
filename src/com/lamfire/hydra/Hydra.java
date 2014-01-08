@@ -16,8 +16,8 @@ import com.lamfire.hydra.net.Session;
 import com.lamfire.hydra.net.SessionEventListener;
 
 /**
- * 消息河,可以被动接入,也可以主动接入
- * 
+ * 网络连接器
+ * 可以被动接入,也可以主动接入
  * @author lamfire
  * 
  */

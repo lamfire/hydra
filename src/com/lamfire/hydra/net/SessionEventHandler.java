@@ -47,6 +47,7 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 
 	public synchronized void shutdown() {
 		sessions.clear();
+        service.shutdown();
 	}
 
 	@Override

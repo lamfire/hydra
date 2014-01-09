@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.lamfire.logger.Logger;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -14,6 +15,7 @@ import org.jboss.netty.channel.ChannelFutureListener;
 import com.lamfire.utils.Sets;
 
 public class SessionGroup implements Iterable<Session>{
+    private static final Logger LOGGER = Logger.getLogger(SessionGroup.class);
 	private final Lock lock = new ReentrantLock();
 	private final Map<Integer, Session> sessionMap = new ConcurrentHashMap<Integer, Session>();
 	private final Map<Serializable, Integer> idMap = new HashMap<Serializable, Integer>();
@@ -26,6 +28,9 @@ public class SessionGroup implements Iterable<Session>{
 			Serializable key = keyMap.get(sessionId);
 			remove(key);
             iterator = iterator();
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("The session["+sessionId+"] was closed,remove it.");
+            }
 		}
 	};
 
@@ -46,6 +51,9 @@ public class SessionGroup implements Iterable<Session>{
 			if (!sessionMap.containsKey(sessionId)) {
 				sessionMap.put(sessionId, s);
 				channel.getCloseFuture().addListener(remover);
+                if(LOGGER.isDebugEnabled()){
+                    LOGGER.debug("The session["+sessionId+"] added.");
+                }
 				return true;
 			}
 		} finally {

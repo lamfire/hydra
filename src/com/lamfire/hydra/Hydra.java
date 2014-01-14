@@ -2,6 +2,8 @@ package com.lamfire.hydra;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.exception.NotSupportedMethodException;
@@ -14,6 +16,7 @@ import com.lamfire.hydra.net.Server;
 import com.lamfire.hydra.net.Serverable;
 import com.lamfire.hydra.net.Session;
 import com.lamfire.hydra.net.SessionEventListener;
+import com.lamfire.utils.Threads;
 
 /**
  * 网络连接器
@@ -23,6 +26,7 @@ import com.lamfire.hydra.net.SessionEventListener;
  */
 public abstract class Hydra implements MessageHandler,SessionEventListener , Clientable, Serverable {
 	static final Logger LOGGER = Logger.getLogger(Hydra.class);
+    private static final String WorkerThreadName = "Hydra.Worker";
 	private Server server;
 	private Client client;
 	private int keepaliveConnsWithClient = 1;
@@ -36,6 +40,8 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	private int maxWaitWithHeartbeat = 5;
 	private boolean keepAlive = false;
 	private boolean autoConnectRetry = false;
+    private int workerThreads = -1;//工作线程数
+    private ExecutorService workerService ;
 
 	public Hydra(String host, int port) {
 		this.host = host;
@@ -59,6 +65,10 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	public boolean isAutoConnectRetry() {
 		return autoConnectRetry;
 	}
+
+    public void setWorkerThreads(int threads){
+        this.workerThreads = threads;
+    }
 
 	public void setAutoConnectRetry(boolean autoConnectRetry) {
 		this.autoConnectRetry = autoConnectRetry;
@@ -112,6 +122,22 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		this.port = port;
 	}
 
+    public synchronized ExecutorService getExecutorService(){
+        if(workerService != null){
+            return workerService;
+        }
+
+        if(this.workerThreads == -1){
+          this.workerService = Executors.newCachedThreadPool(Threads.makeThreadFactory(WorkerThreadName));
+        }
+
+        if(this.workerThreads > 0 ){
+            this.workerService = Executors.newFixedThreadPool(this.workerThreads,Threads.makeThreadFactory(WorkerThreadName));
+        }
+
+        return workerService;
+    }
+
 	void onReady() {
 		if(isReady){
 			return;
@@ -146,7 +172,7 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 			client = new Client(host, port);
 			client.setMessageHandler(this);
 			client.setSessionEventListener(this);
-			
+			client.setExecutorService(getExecutorService());
 			if(this.autoConnectRetry){
 				this.autoConnectTask.setDelay(autoConnectRetryTime);
 				this.autoConnectTask.setKeepaliveConnections(keepaliveConnsWithClient);
@@ -194,6 +220,7 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		server = new Server(host, port);
 		server.setMessageHandler(this);
 		server.setSessionEventListener(this);
+        server.setExecutorService(getExecutorService());
 		server.bind();
 		heartbeatTask.setSendHeartbeatRequestEnable(false);
 		try {

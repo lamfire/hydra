@@ -1,6 +1,7 @@
 package com.lamfire.hydra;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.ExecutorService;
 
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.net.Context;
@@ -21,8 +22,12 @@ public abstract class Snake extends Hydra {
 
 	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
 		Task task = new Task(context, session, buffer);
-		//线程池执行?
-		task.run();
+        ExecutorService service = this.getExecutorService();
+        if(service == null){
+		    task.run();
+            return;
+        }
+        service.submit(task);
 	}
 	
 	protected abstract void handleMessage(final MessageContext context,final Message message);

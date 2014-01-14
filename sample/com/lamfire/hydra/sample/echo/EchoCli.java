@@ -16,7 +16,7 @@ public class EchoCli {
 			@Override
 			public void execute(MessageContext context, Message message) {
 				LOGGER.info(context.getSessionId()  +" - " +message.toString());
-				//context.send(message.getId(),message.getBody());
+				context.send(message.getId(),message.getBody());
 			}
 		});
 		

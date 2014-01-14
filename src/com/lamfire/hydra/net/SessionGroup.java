@@ -29,7 +29,7 @@ public class SessionGroup implements Iterable<Session>{
 			remove(key);
             iterator = iterator();
             if(LOGGER.isDebugEnabled()){
-                LOGGER.debug("The session["+sessionId+"] was closed,remove it.");
+                LOGGER.debug("The session["+sessionId+"] was closed,removed it,group size was " + sessionMap.size());
             }
 		}
 	};
@@ -52,7 +52,7 @@ public class SessionGroup implements Iterable<Session>{
 				sessionMap.put(sessionId, s);
 				channel.getCloseFuture().addListener(remover);
                 if(LOGGER.isDebugEnabled()){
-                    LOGGER.debug("The session["+sessionId+"] added.");
+                    LOGGER.debug("The session["+sessionId+"] added,group size was " + sessionMap.size());
                 }
 				return true;
 			}

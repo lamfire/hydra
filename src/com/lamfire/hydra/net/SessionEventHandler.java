@@ -20,7 +20,7 @@ import com.lamfire.utils.ThreadFactory;
 abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implements Context{
 	private static final Logger LOGGER = Logger.getLogger(SessionEventHandler.class);
 	private final Map<Integer,Session> sessions = Maps.newHashMap();//所有的SESSION
-	private final ExecutorService service = Executors.newFixedThreadPool(16,new ThreadFactory("MessageHandler"));
+	private ExecutorService service = null;
 	
 	private SessionEventListener sessionEventListener;
 	private MessageHandler messageHandler;
@@ -28,6 +28,10 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 	public void setSessionEventListener(SessionEventListener listener){
 		this.sessionEventListener = listener;
 	}
+
+    public void setExecutorService(ExecutorService service){
+        this.service = service;
+    }
 	
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
@@ -47,7 +51,10 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 
 	public synchronized void shutdown() {
 		sessions.clear();
-        service.shutdown();
+        if(service != null){
+            service.shutdown();
+            service = null;
+        }
 	}
 
 	@Override
@@ -86,8 +93,11 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		
 		//
 		Task task = new Task(this,session,buffer);
-		service.submit(task);
-		
+        if(service != null){
+		    service.submit(task);
+        }   else{
+            task.run();
+        }
 	}
 	
 

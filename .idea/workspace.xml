@@ -8,12 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e61e5a5b-5462-4867-8129-954ff9c34be9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" afterPath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/EchoCli.java" afterPath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/EchoCli.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/Snake.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/Snake.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" />
     </list>
     <ignored path="hydra.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,7 +65,19 @@
     <favorites_list name="hydra" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="Hydra.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="125" column="36" selection-start="3156" selection-end="3156" vertical-scroll-proportion="0.4026163">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -96,9 +103,9 @@
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Snake.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
         <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/EchoCli.java" />
         <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
       </list>
     </option>
   </component>
@@ -141,10 +148,6 @@
               <option name="myItemId" value="hydra" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -163,20 +166,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hydra" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -209,9 +198,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Application.EchoCli">
     <configuration default="false" name="ReqresCli" type="Application" factoryName="Application" temporary="true">
@@ -353,6 +342,24 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -379,24 +386,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -519,7 +508,11 @@
       <created>1389251863670</created>
       <updated>1389251863670</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="添加工作线程设置">
+      <created>1389668803059</created>
+      <updated>1389668803059</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -543,7 +536,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24928162" sideWeight="0.67086834" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32913166" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913166" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -588,7 +581,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="SessionGroup add debug info" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加工作线程设置" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -605,6 +598,7 @@
     <MESSAGE value="SessionGroup implements iterator" />
     <MESSAGE value="fix MessageHandler cannot shutdown" />
     <MESSAGE value="SessionGroup add debug info" />
+    <MESSAGE value="添加工作线程设置" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -688,15 +682,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="133" column="30" selection-start="3388" selection-end="3388" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/IdentitySnake.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="85" selection-start="415" selection-end="415" vertical-scroll-proportion="0.7037037">
@@ -715,6 +700,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="36" selection-start="830" selection-end="830" vertical-scroll-proportion="0.7916667">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="36" selection-start="3156" selection-end="3156" vertical-scroll-proportion="0.4026163">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

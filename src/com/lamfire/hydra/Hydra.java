@@ -122,6 +122,10 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		this.port = port;
 	}
 
+    public void setExecutorService(ExecutorService worker){
+        this.workerService = worker;
+    }
+
     public synchronized ExecutorService getExecutorService(){
         if(workerService != null){
             return workerService;

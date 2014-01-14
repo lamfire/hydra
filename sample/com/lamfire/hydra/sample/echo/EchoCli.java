@@ -15,7 +15,7 @@ public class EchoCli {
 		mapper.registAction(1001, new Action() {
 			@Override
 			public void execute(MessageContext context, Message message) {
-				LOGGER.info(context.getSessionId()  +" - " +message.toString());
+				LOGGER.info(context.getSessionId()  +" - " +message.toString() + " " + context.getSession().getSendCount() +"/" + context.getSession().getSendCompletedCount() +"/" + context.getSession().getSendBufferedSize() );
 				context.send(message.getId(),message.getBody());
 			}
 		});

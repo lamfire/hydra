@@ -31,4 +31,7 @@ public interface Session{
 	public boolean isClosed();
 	public boolean isConnected();
 	public boolean isSendable();
+    public long getSendCount();
+    public long getSendCompletedCount();
+    public long getSendBufferedSize();
 }

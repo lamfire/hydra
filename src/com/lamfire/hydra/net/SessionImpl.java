@@ -3,9 +3,13 @@ package com.lamfire.hydra.net;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.Channels;
 
 import com.lamfire.logger.Logger;
@@ -17,9 +21,38 @@ public class SessionImpl implements Session, Comparable<Session> {
 	private Map<String, Object> attributes;
 	private Channel channel;
 
+    private Lock counterLock = new ReentrantLock();
+    private AtomicLong sendCounter = new AtomicLong(0);
+    private AtomicLong sendCompleteCounter = new AtomicLong(0);
+
+    ChannelFutureListener sendCompleteListener = new ChannelFutureListener() {
+        @Override
+        public void operationComplete(ChannelFuture channelFuture) throws Exception {
+            incCompleteCounter();
+        }
+    } ;
+
 	protected SessionImpl(Channel channel) {
 		this.channel = channel;
 	}
+
+    private void incSendCounter(){
+        try{
+            this.counterLock.lock();
+            this.sendCounter.incrementAndGet();
+        }finally {
+            this.counterLock.unlock();
+        }
+    }
+
+    private void incCompleteCounter(){
+        try{
+            this.counterLock.lock();
+            this.sendCompleteCounter.incrementAndGet();
+        }finally {
+            this.counterLock.unlock();
+        }
+    }
 
 	public int getSessionId() {
 		return this.channel.getId();
@@ -30,8 +63,27 @@ public class SessionImpl implements Session, Comparable<Session> {
 			throw new SessionException("The channel was closed,cannot write message.");
 		}
 		ChannelFuture future = Channels.write(channel, datas);
+        incSendCounter();
+        future.addListener(this.sendCompleteListener);
 		return new Future(this, future);
 	}
+
+    public long getSendCount(){
+        return sendCounter.get();
+    }
+
+    public long getSendCompletedCount(){
+        return  sendCompleteCounter.get();
+    }
+
+    public long getSendBufferedSize(){
+        try{
+            counterLock.lock();
+            return getSendCount() - getSendCompletedCount();
+        }finally {
+            counterLock.unlock();
+        }
+    }
 
 	public Future send(byte[] bytes) {
 		return sendDatas(bytes);

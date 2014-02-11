@@ -25,12 +25,12 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 	private boolean shutdowning = false;
 
 	public Client(String host, int port) {
-		this.host = host;
-		this.port = port;
-		channelFactory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-		bootstrap = new ClientBootstrap(channelFactory);
-		bootstrap.setPipelineFactory(this);
-	}
+        this.host = host;
+        this.port = port;
+        channelFactory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+        bootstrap = new ClientBootstrap(channelFactory);
+        bootstrap.setPipelineFactory(this);
+    }
 
 	public Client(String host, int port, SessionEventListener listener) {
 		this(host, port);

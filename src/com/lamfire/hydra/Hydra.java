@@ -283,7 +283,9 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 
 	@Override
 	public void onExceptionCaught(Context context, Session session, Throwable throwable) {
-		LOGGER.warn("[onExceptionCaught]:"+session.toString(),throwable);
+        if(LOGGER.isDebugEnabled()){
+		    LOGGER.warn("[onExceptionCaught]:"+session.toString(),throwable);
+        }
 	}
 
 	@Override

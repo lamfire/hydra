@@ -42,7 +42,6 @@ public class SessionUtils {
 	}
 
 	static void onExceptionCaught(Context context,SessionEventListener l ,Session s,Throwable t){
-		LOGGER.warn(t);
 		if(l != null && s != null){
 			l.onExceptionCaught(context,s,t);
 		}

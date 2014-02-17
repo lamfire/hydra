@@ -3,6 +3,8 @@ package com.lamfire.hydra.sample.reqres;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.lamfire.hydra.Snake;
+import com.lamfire.hydra.reply.ReplyFuture;
+import com.lamfire.hydra.reply.ReplySnake;
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.CycleSessionIterator;
 import com.lamfire.hydra.Message;
@@ -10,29 +12,14 @@ import com.lamfire.hydra.MessageContext;
 import com.lamfire.hydra.net.Context;
 import com.lamfire.hydra.net.Session;
 
-public class ReqresCli extends Snake {
+public class ReqresCli {
 	private static final Logger LOGGER = Logger.getLogger(ReqresCli.class);
-	private  ResponseFutureQueue queue = new ResponseFutureQueue();
-	private CycleSessionIterator it = new CycleSessionIterator(this);
-	private AtomicInteger atimic = new AtomicInteger();
-	
-	public ReqresCli(String host, int port) {
-		super(host, port);
-	}
+
 
 	static void usage(){
 		System.out.println("com.lamfire.nkit.sample.ClientSample [host] [port] [connsize]");
 	}
-	
-	public ResponseFuture sendMessage(byte[] bytes){
-		int id = atimic.getAndIncrement();
-		Session session = it.nextAvailableSession();
-		ResponseFuture future = new ResponseFuture(id);
-		queue.addFuture(future);
-		session.send(new Message(id,bytes));
-		return future;
-	}
-	
+
 	public static void main(String[] args) throws Exception {
 		String host = "127.0.0.1";
 		int port = 8000;
@@ -50,28 +37,15 @@ public class ReqresCli extends Snake {
 		}
 		
 		LOGGER.info("[startup]:"+host + ":" +port  +" - "+ size);
-		ReqresCli cli = new ReqresCli(host,port);
+		ReplySnake cli = new ReplySnake(host,port);
 		cli.setKeepAlive(true);
 		cli.connect();
 
 		for(int i=0;i<10000000;i++){
-			ResponseFuture future = cli.sendMessage(String.valueOf(i).getBytes());
-			System.out.println(new String(future.getResponse()));
+			ReplyFuture future = cli.send(String.valueOf(i).getBytes());
+			System.out.println(new String(future.getReply()));
 		}
 	}
 
-	@Override
-	protected void handleMessage(MessageContext context, Message message) {
-		ResponseFuture future = queue.remove(message.getId());
-		future.onResponse(message);
-	}
-
-	@Override
-	public void onExceptionCaught(Context context, Session session, Throwable throwable) {
-		LOGGER.error(throwable.getMessage(),throwable);
-	}
-
-	
-	
 	
 }

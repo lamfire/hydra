@@ -5,6 +5,7 @@ import com.lamfire.hydra.Message;
 import com.lamfire.hydra.MessageContext;
 import com.lamfire.hydra.Snake;
 import com.lamfire.hydra.net.Session;
+import com.lamfire.logger.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * To change this template use File | Settings | File Templates.
  */
 public class ReplySnake extends Snake{
+    private static final Logger LOGGER = Logger.getLogger(ReplySnake.class);
     private ReplyWaitQueue replyQueue = new ReplyWaitQueue();
     private CycleSessionIterator it;
     private AtomicInteger atimic = new AtomicInteger();
@@ -37,8 +39,16 @@ public class ReplySnake extends Snake{
     @Override
     protected void handleMessage(MessageContext context, Message message) {
         ReplyFuture future = replyQueue.take(message.getId());
-        if(future != null){
-            future.onReceivedReply(message);
+        if(future == null){
+            onReceivedPushMessage(context,message);
+            return;
+        }
+        future.onReceivedReply(message);
+    }
+
+    protected void onReceivedPushMessage(MessageContext context, Message message){
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Not overwrite method onReceivedPushMessage.ignore message:" + message);
         }
     }
 

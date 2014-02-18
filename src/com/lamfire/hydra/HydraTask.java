@@ -39,7 +39,9 @@ abstract class HydraTask implements Runnable{
 			return;
 		}
 		schedule = Executors.newScheduledThreadPool(1,new ThreadFactory(name));
-		LOGGER.debug("["+name+"@NkitTask]:startup schedule with delay " + delay + " seconds");
+        if(LOGGER.isDebugEnabled()){
+		    LOGGER.debug("["+name+"@HydraTask]:startup schedule with delay " + delay + " seconds");
+        }
 		schedule.scheduleWithFixedDelay(this, this.delay, this.delay, TimeUnit.SECONDS);
 	}
 	

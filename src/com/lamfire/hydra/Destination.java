@@ -36,6 +36,11 @@ public abstract class Destination extends Hydra {
 		super(host,port);
 	}
 
+    public Destination(String name,String host, int port) {
+        super(host,port);
+        this.name = name;
+    }
+
 	void setBus(MessageBus bus){
 		this.bus = bus;
 	}
@@ -48,8 +53,10 @@ public abstract class Destination extends Hydra {
 		}
 		Message message = new Message();
 		message.decode(buffer);
-		bus.onDealerMessage(session, message);	
-		LOGGER.debug("[Dispatcher] onMessageReceived:"+message);
+		bus.onDealerMessage(session, message);
+        if(LOGGER.isDebugEnabled()){
+		    LOGGER.debug("[Dispatcher] onMessageReceived:"+message);
+        }
 	}
 
 

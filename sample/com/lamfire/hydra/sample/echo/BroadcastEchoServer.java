@@ -32,7 +32,7 @@ public class BroadcastEchoServer {
 	
 	
 	static void usage(){
-		LOGGER.info("com.lamfire.nkit.sample.ServiceServer [host] [port]");
+		LOGGER.info("com.lamfire.hydra.sample.ServiceServer [host] [port]");
 	}
 	
 	public static void main(String[] args) {

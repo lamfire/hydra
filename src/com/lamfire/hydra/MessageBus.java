@@ -1,7 +1,6 @@
 package com.lamfire.hydra;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +17,7 @@ import com.lamfire.utils.ThreadFactory;
 public abstract class MessageBus implements Runnable{
 	static final Logger LOGGER = Logger.getLogger(MessageBus.class);
 	private Gateway gateway;
-	private final List<Destination> destinations = new LinkedList<Destination>();
+	private final Map<String,Destination> destinations = new HashMap<String,Destination>();
 	private final FixedQueue<Message> messageQueue;
 	private final ExecutorService scheduler = Executors.newFixedThreadPool(1, new ThreadFactory("MessageBus#Cache"));
 	private boolean running = true;
@@ -37,15 +36,15 @@ public abstract class MessageBus implements Runnable{
 	
 	public void addDestination(Destination destination){
 		destination.setBus(this);
-		this.destinations.add(destination);
+		this.destinations.put(destination.getName(), destination);
 	}
 
 	public Gateway getGateway() {
 		return gateway;
 	}
 
-	public List<Destination> getDestinations() {
-		return destinations;
+	public Map<String,Destination> getDestinations() {
+		return Collections.unmodifiableMap(destinations);
 	}
 	
 	/**
@@ -60,7 +59,7 @@ public abstract class MessageBus implements Runnable{
 		}
 	}
 	
-	protected abstract void onDispatch(List<Destination> destinations,Message message);
+	protected abstract void onDispatch(Map<String,Destination> destinations,Message message);
 
 	/**
 	 * 消息路由器收到消息回应
@@ -74,7 +73,7 @@ public abstract class MessageBus implements Runnable{
 	}
 	
 	private boolean hasAlivedDestination(){
-		for(Destination destination : this.destinations){
+		for(Destination destination : this.destinations.values()){
 			if(destination.hasConnections()){
 				return true;
 			}

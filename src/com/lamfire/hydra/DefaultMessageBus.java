@@ -1,6 +1,7 @@
 package com.lamfire.hydra;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lamfire.logger.Logger;
 
@@ -21,8 +22,8 @@ public class DefaultMessageBus extends MessageBus{
 		super(gateway, bufferSize);
 	}
 
-	protected void onDispatch(List<Destination> destinations,Message message){
-		for(Destination destination : destinations){
+	protected void onDispatch(Map<String,Destination> destinations,Message message){
+		for(Destination destination : destinations.values()){
 			destination.forwardMessage(message);
 		}
 	}

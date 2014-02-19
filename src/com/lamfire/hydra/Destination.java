@@ -53,7 +53,7 @@ public abstract class Destination extends Hydra {
 		}
 		Message message = new Message();
 		message.decode(buffer);
-		bus.onDealerMessage(session, message);
+		bus.onReplyMessage(session, message);
         if(LOGGER.isDebugEnabled()){
 		    LOGGER.debug("[Dispatcher] onMessageReceived:"+message);
         }

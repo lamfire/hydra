@@ -10,7 +10,7 @@ import com.lamfire.hydra.net.Session;
  * @author lamfire
  *
  */
-public class PollerDestination extends Destination {
+public class PollerDestination extends HydraDestination {
 	private static final Logger LOGGER = Logger.getLogger(PollerDestination.class);
 	public PollerDestination(String host, int port) {
 		super(host, port);

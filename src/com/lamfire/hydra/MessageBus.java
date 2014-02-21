@@ -31,19 +31,23 @@ public abstract class MessageBus implements Runnable{
 		this.gateway = gateway;
 		this.gateway.setBus(this);
 		this.messageQueue = new FixedQueue<Message>(bufferSize);
-		scheduler.submit(this);
+		this.scheduler.submit(this);
 	}
 	
-	public void addDestination(Destination destination){
+	public void addDestination(HydraDestination destination){
 		destination.setBus(this);
 		this.destinations.put(destination.getName(), destination);
 	}
+
+    public void addDestination(String name,Destination destination){
+        this.destinations.put(name, destination);
+    }
 
 	public Gateway getGateway() {
 		return gateway;
 	}
 
-	public Map<String,Destination> getDestinations() {
+	public Map<String,? extends Destination> getDestinations() {
 		return Collections.unmodifiableMap(destinations);
 	}
 	
@@ -59,7 +63,7 @@ public abstract class MessageBus implements Runnable{
 		}
 	}
 	
-	protected abstract void onDispatch(Map<String,Destination> destinations,Message message);
+	protected abstract void onDispatch(Map<String,? extends Destination> destinations,Message message);
 
 	/**
 	 * 消息路由器收到消息回应
@@ -76,7 +80,11 @@ public abstract class MessageBus implements Runnable{
 	
 	private boolean hasAlivedDestination(){
 		for(Destination destination : this.destinations.values()){
-			if(destination.hasConnections()){
+            if(!(destination instanceof  HydraDestination)){
+                 return true;
+            }
+            HydraDestination hydra = (HydraDestination) destination;
+			if(hydra.hasConnections()){
 				return true;
 			}
 		}
@@ -86,10 +94,14 @@ public abstract class MessageBus implements Runnable{
 	@Override
 	public void run() {
 		while(running){
-			if(hasAlivedDestination()){
-				Message message = messageQueue.pop();
-				onDispatch(getDestinations(),message);
-			}
+            try{
+                if(hasAlivedDestination()){
+                    Message message = messageQueue.pop();
+                    onDispatch(getDestinations(),message);
+                }
+            }catch (Throwable t){
+                LOGGER.warn(t.getMessage(),t);
+            }
 		}
 	}
 	

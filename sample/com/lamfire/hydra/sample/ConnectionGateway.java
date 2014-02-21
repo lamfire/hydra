@@ -1,10 +1,7 @@
 package com.lamfire.hydra.sample;
 
-import com.lamfire.hydra.DefaultMessageBus;
-import com.lamfire.hydra.Destination;
-import com.lamfire.hydra.Gateway;
-import com.lamfire.hydra.MessageBus;
-import com.lamfire.hydra.PollerDestination;
+import com.lamfire.hydra.*;
+import com.lamfire.hydra.HydraDestination;
 import com.lamfire.utils.StringUtils;
 
 public class ConnectionGateway {
@@ -39,7 +36,7 @@ public class ConnectionGateway {
 			gateway.bind();
 		}
 		
-		Destination dest = new PollerDestination("0.0.0.0", 8001);
+		HydraDestination dest = new PollerDestination("0.0.0.0", 8001);
 		dest.bind();
 
 		MessageBus bus = new DefaultMessageBus(gateway);

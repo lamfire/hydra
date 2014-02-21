@@ -9,7 +9,7 @@ import com.lamfire.hydra.net.Session;
  * @author lamfire
  *
  */
-public class BroadcastDestination extends Destination {
+public class BroadcastDestination extends HydraDestination {
 
 	public BroadcastDestination(String host, int port) {
 		super(host, port);

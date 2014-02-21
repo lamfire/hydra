@@ -35,12 +35,15 @@ public abstract class MessageBus implements Runnable{
 	}
 	
 	public void addDestination(HydraDestination destination){
-		destination.setBus(this);
+		destination.setMessageBus(this);
 		this.destinations.put(destination.getName(), destination);
 	}
 
     public void addDestination(String name,Destination destination){
         this.destinations.put(name, destination);
+        if(destination instanceof HydraDestination){
+            ((HydraDestination)destination).setMessageBus(this);
+        }
     }
 
 	public Gateway getGateway() {

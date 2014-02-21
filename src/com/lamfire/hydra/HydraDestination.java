@@ -28,12 +28,23 @@ public abstract class HydraDestination extends Hydra implements Destination {
 		super(host,port);
 	}
 
+    public HydraDestination(String host, int port,MessageBus bus) {
+        super(host,port);
+        this.bus = bus;
+    }
+
     public HydraDestination(String name, String host, int port) {
         super(host,port);
         this.name = name;
     }
 
-	void setBus(MessageBus bus){
+    public HydraDestination(String name, String host, int port,MessageBus bus) {
+        super(host,port);
+        this.name = name;
+        this.bus = bus;
+    }
+
+	public void setMessageBus(MessageBus bus){
 		this.bus = bus;
 	}
 

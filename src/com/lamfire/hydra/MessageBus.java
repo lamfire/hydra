@@ -74,12 +74,16 @@ public abstract class MessageBus implements Runnable{
 	void onReplyMessage(Session session, Message message) {
 		int sid = message.popLink();
 		Session s = gateway.getSession(sid);
-		if(s == null){
-			LOGGER.warn("request session was closed,ignore reply:" + new String(message.getBody()));
+		if(s != null){
+            onSendReplyMessage(s,message);
+			return;
 		}
-        s.send(message);
+        LOGGER.warn("request session was closed,ignore reply:" + new String(message.getBody()));
+    }
 
-	}
+    protected void onSendReplyMessage(Session replySession,Message message){
+        replySession.send(message);
+    }
 	
 	private boolean hasAlivedDestination(){
 		for(Destination destination : this.destinations.values()){

@@ -21,6 +21,7 @@ public class ReplySnake extends Snake{
     private ReplyWaitQueue replyQueue = new ReplyWaitQueue();
     private CycleSessionIterator it;
     private AtomicInteger atimic = new AtomicInteger();
+    private OnReceivedPushMessageListener onReceivedPushMessageListener;
 
     public ReplySnake(String host, int port) {
         super(host, port);
@@ -47,9 +48,16 @@ public class ReplySnake extends Snake{
     }
 
     protected void onReceivedPushMessage(MessageContext context, Message message){
+        if(this.onReceivedPushMessageListener != null){
+            this.onReceivedPushMessageListener.onReceivedPushMessage(context,message);
+            return;
+        }
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Not overwrite method onReceivedPushMessage.ignore message:" + message);
         }
     }
 
+    public void setOnReceivedPushMessageListener(OnReceivedPushMessageListener onReceivedPushMessageListener) {
+        this.onReceivedPushMessageListener = onReceivedPushMessageListener;
+    }
 }

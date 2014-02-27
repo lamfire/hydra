@@ -7,8 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e61e5a5b-5462-4867-8129-954ff9c34be9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" />
     </list>
     <ignored path="hydra.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -79,7 +80,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionUtils.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/ReplySnake.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reqres/ReplyWaitQueue.java" />
@@ -87,7 +87,6 @@
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reqres/ReplySnake.java" />
         <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresCli.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/HydraTask.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" />
         <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/AbstractDestination.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Destination.java" />
@@ -95,6 +94,8 @@
         <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/ConnectionGateway.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/HydraDestination.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" />
       </list>
     </option>
   </component>
@@ -531,7 +532,11 @@
       <created>1392951308411</created>
       <updated>1392951308411</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="优化MessageBus.onReplyMessage接口">
+      <created>1393487272825</created>
+      <updated>1393487272825</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -600,7 +605,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化HydraDestination接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化MessageBus.onReplyMessage接口" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -624,6 +629,7 @@
     <MESSAGE value="更新消息总线onDispatch接口" />
     <MESSAGE value="增加非正常时的日志输出" />
     <MESSAGE value="优化HydraDestination接口" />
+    <MESSAGE value="优化MessageBus.onReplyMessage接口" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -633,16 +639,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="69" selection-start="1540" selection-end="1540" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Message.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="263" selection-end="263" vertical-scroll-proportion="-2.8168604" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="22" selection-start="753" selection-end="753" vertical-scroll-proportion="-1.4242879" />
@@ -722,6 +718,22 @@
           <folding>
             <element signature="e#538#558#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="46" selection-start="263" selection-end="292" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="111" selection-start="2063" selection-end="2063" vertical-scroll-proportion="0.70640177">
+          <folding />
         </state>
       </provider>
     </entry>

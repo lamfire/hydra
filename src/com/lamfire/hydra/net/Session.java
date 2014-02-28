@@ -34,4 +34,6 @@ public interface Session{
     public long getSendCount();
     public long getSendCompletedCount();
     public long getSendBufferedSize();
+    public void setSessionClosedListener(SessionClosedListener sessionClosedListener);
+    public SessionClosedListener getSessionClosedListener();
 }

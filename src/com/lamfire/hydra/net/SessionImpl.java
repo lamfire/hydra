@@ -24,6 +24,7 @@ public class SessionImpl implements Session, Comparable<Session> {
     private Lock counterLock = new ReentrantLock();
     private AtomicLong sendCounter = new AtomicLong(0);
     private AtomicLong sendCompleteCounter = new AtomicLong(0);
+    private SessionClosedListener sessionClosedListener;
 
     ChannelFutureListener sendCompleteListener = new ChannelFutureListener() {
         @Override
@@ -85,7 +86,17 @@ public class SessionImpl implements Session, Comparable<Session> {
         }
     }
 
-	public Future send(byte[] bytes) {
+    @Override
+    public void setSessionClosedListener(SessionClosedListener sessionClosedListener) {
+        this.sessionClosedListener = sessionClosedListener;
+    }
+
+    @Override
+    public SessionClosedListener getSessionClosedListener() {
+        return sessionClosedListener;
+    }
+
+    public Future send(byte[] bytes) {
 		return sendDatas(bytes);
 	}
 

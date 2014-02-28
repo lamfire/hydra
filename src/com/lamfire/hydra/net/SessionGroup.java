@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.lamfire.hydra.packet.Packet;
 import com.lamfire.logger.Logger;
-import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 
@@ -17,96 +17,130 @@ import com.lamfire.utils.Sets;
 public class SessionGroup implements Iterable<Session>{
     private static final Logger LOGGER = Logger.getLogger(SessionGroup.class);
 	private final Lock lock = new ReentrantLock();
-	private final Map<Integer, Session> sessionMap = new ConcurrentHashMap<Integer, Session>();
-	private final Map<Serializable, Integer> idMap = new HashMap<Serializable, Integer>();
-	private final Map<Integer, Serializable> keyMap = new HashMap<Integer, Serializable>();
-    private Iterator<Session> iterator;
+	private final Map<Serializable, Session> group = new ConcurrentHashMap<Serializable, Session>();
 
 	private final ChannelFutureListener remover = new ChannelFutureListener() {
 		public void operationComplete(ChannelFuture future) throws Exception {
 			int sessionId = future.getChannel().getId();
-			Serializable key = keyMap.get(sessionId);
-			remove(key);
-            iterator = iterator();
+			Serializable key = getKeyBySessionId(sessionId);
+            if(key == null){
+			    return;
+            }
+            Session session = remove(key);
             if(LOGGER.isDebugEnabled()){
-                LOGGER.debug("The session["+sessionId+"] was closed,removed it,group size was " + sessionMap.size());
+                LOGGER.debug("The session["+session+"] was closed,removed it,group size was " + group.size());
             }
 		}
 	};
 
-	public boolean add(Serializable key, Session s) {
+    private Session getSessionBySessionId(int sessionId){
+        lock.lock();
+        try{
+            for(Session s : group.values()){
+                if(s.getSessionId() == sessionId){
+                    return s;
+                }
+            }
+        }finally {
+            lock.unlock();
+        }
+        return null;
+    }
+
+    private Serializable getKeyBySessionId(int sessionId){
+        lock.lock();
+        try{
+            for(Entry<Serializable,Session> e : group.entrySet()){
+                Session s = e.getValue();
+                if(s.getSessionId() == sessionId){
+                    return e.getKey();
+                }
+            }
+        }finally {
+            lock.unlock();
+        }
+        return null;
+    }
+
+	public boolean add(Serializable key, Session session) {
 		lock.lock();
 		try {
-			Channel channel = s.getChannel();
-			int sessionId = s.getSessionId();
-
             //exists?
-            if(keyMap.containsKey(key)){
+            if(group.containsKey(key)){
                 remove(key);
             }
 
-            idMap.put(key, sessionId);
-            keyMap.put(sessionId, key);
-
-			if (!sessionMap.containsKey(sessionId)) {
-				sessionMap.put(sessionId, s);
-				channel.getCloseFuture().addListener(remover);
+			if (!group.values().contains(session)) {
+				group.put(key, session);
+				bindRemoveListener(session);
                 if(LOGGER.isDebugEnabled()){
-                    LOGGER.debug("The session["+sessionId+"] added,group size was " + sessionMap.size());
+                    LOGGER.debug("The session["+session+"] added,group size was " + group.size());
                 }
 				return true;
 			}
 		} finally {
 			lock.unlock();
-            iterator = iterator();
 		}
 
 		return false;
 	}
 
-	public Serializable getKeyBySessionId(Integer sessionId) {
-		return keyMap.get(sessionId);
-	}
+    private void send(Session session , byte[] bytes){
+         if(session.isConnected() && session.isSendable()){
+             session.send(bytes);
+         }
+    }
 
-	public void close() {
+    public void broadcast(byte[] bytes){
+        for(Session session :  sessions()){
+            send(session,bytes);
+        }
+    }
+
+    public void broadcast(Packet<?> packet){
+        for(Session session :  sessions()){
+            send(session,packet.encode().array());
+        }
+    }
+
+    public void close() {
 		lock.lock();
 		try {
-			Set<Entry<Integer, Session>> sessions = Sets.newCopyOnWriteArraySet(sessionMap.entrySet());
-			for (Map.Entry<Integer, Session> entry : sessions) {
-				Session s = entry.getValue();
-				s.close();
+			for (Session session : sessions()) {
+                unbindRemoveListener(session);
+                session.close();
 			}
-			sessionMap.clear();
-			idMap.clear();
-			keyMap.clear();
+            group.clear();
 		} finally {
 			lock.unlock();
 		}
 	}
 
 	public boolean isEmpty() {
-		return sessionMap.isEmpty();
+		return group.isEmpty();
 	}
 
 	public Session remove(Serializable key) {
 		lock.lock();
 		try {
-			Integer sessionId = idMap.remove(key);
-			if (sessionId == null) {
-				return null;
+			Session s = group.remove(key);
+			if (s != null) {
+                unbindRemoveListener(s);
+				return s;
 			}
-			keyMap.remove(sessionId);
-			Session s = sessionMap.remove(sessionId);
-			if (s == null) {
-				return null;
-			}
-			s.getChannel().getCloseFuture().removeListener(remover);
-			return s;
 		} finally {
 			lock.unlock();
-            iterator = iterator();
 		}
+        return null;
 	}
+
+    private void bindRemoveListener(Session session){
+        session.getChannel().getCloseFuture().addListener(remover);
+    }
+
+    private void unbindRemoveListener(Session session){
+        session.getChannel().getCloseFuture().removeListener(remover);
+    }
 
 	public int remove(Collection<Serializable> keys) {
 		lock.lock();
@@ -125,66 +159,27 @@ public class SessionGroup implements Iterable<Session>{
 	}
 
 	public Session get(Serializable key) {
-		Integer sessionId = idMap.get(key);
-		if (sessionId == null)
-			return null;
-		return sessionMap.get(sessionId);
-	}
-	
-	public Session getBySessionId(Integer sessionId){
-		Serializable key = keyMap.get(sessionId);
-		if(key != null){
-			return sessionMap.get(key);
-		}
-		return null;
+		return group.get(key);
 	}
 
 	public int size() {
-		return sessionMap.size();
+		return group.size();
 	}
 
 	public Collection<Session> sessions() {
-		return sessionMap.values();
+		return Sets.newCopyOnWriteArraySet(group.values());
 	}
 
 	public Collection<Serializable> keys() {
-		return idMap.keySet();
+		return group.keySet();
 	}
 
-	public boolean existsKey(Serializable key) {
-		return idMap.containsKey(key);
-	}
-
-	public boolean existsSession(int sessionId) {
-		return keyMap.containsKey(sessionId);
+	public boolean exists(Serializable key) {
+		return group.containsKey(key);
 	}
 
     @Override
     public Iterator<Session> iterator() {
-        return sessionMap.values().iterator();
-    }
-
-
-    public synchronized Session next(){
-        lock.lock();
-        try {
-            try{
-                if(this.iterator.hasNext()){
-                    return this.iterator.next();
-                }
-                this.iterator = iterator();
-                if(!this.iterator.hasNext()){
-                    return null;
-                }
-            }catch (Throwable e){
-                this.iterator = iterator();
-                if(!this.iterator.hasNext()){
-                    return null;
-                }
-            }
-            return next();
-        } finally {
-            lock.unlock();
-        }
+        return group.values().iterator();
     }
 }

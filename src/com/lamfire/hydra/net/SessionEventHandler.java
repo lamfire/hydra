@@ -141,6 +141,13 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		super.channelClosed(ctx, e);
 		Session session = sessions.remove(e.getChannel().getId());
+        if(session == null){
+            return;
+        }
+        SessionClosedListener listener = session.getSessionClosedListener();
+        if(listener != null){
+            listener.onClosed(session);
+        }
 		SessionUtils.onClosed(this,sessionEventListener, session);
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("channelClosed:"+session);

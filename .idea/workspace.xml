@@ -7,9 +7,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e61e5a5b-5462-4867-8129-954ff9c34be9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionClosedListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ServerTest.java" afterPath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ServerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/log4j.properties" afterPath="$PROJECT_DIR$/sample/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/Session.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/Session.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionImpl.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionImpl.java" />
     </list>
     <ignored path="hydra.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,14 +86,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/ReplySnake.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reqres/ReplyWaitQueue.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reqres/ReplyFuture.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reqres/ReplySnake.java" />
-        <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresCli.java" />
-        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/HydraTask.java" />
-        <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/AbstractDestination.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/Destination.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/DefaultMessageBus.java" />
@@ -96,6 +94,14 @@
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java" />
         <option value="$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java" />
+        <option value="$PROJECT_DIR$/sample/log4j.properties" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionClosedListener.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/Session.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" />
+        <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresServer.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java" />
+        <option value="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ServerTest.java" />
       </list>
     </option>
   </component>
@@ -138,6 +144,20 @@
               <option name="myItemId" value="hydra" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hydra" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -157,16 +177,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="hydra" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -192,73 +202,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
   </component>
-  <component name="RunManager" selected="Application.ClientSample">
-    <configuration default="false" name="ReqresServer" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.lamfire.hydra.sample.reqres.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.reqres.ReqresServer" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="hydra" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="ReqresCli" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.lamfire.hydra.sample.reqres.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.reqres.ReqresCli" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="hydra" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="ConnectionGateway" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.lamfire.hydra.sample.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.ConnectionGateway" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="hydra" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.ClientTest">
     <configuration default="false" name="ServiceServer" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -289,6 +233,72 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.ClientSample" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="hydra" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ServerTest" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lamfire.hydra.sample.packet.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.packet.ServerTest" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="hydra" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReqresServer" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lamfire.hydra.sample.reqres.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.reqres.ReqresServer" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="hydra" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ClientTest" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lamfire.hydra.sample.packet.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lamfire.hydra.sample.packet.ClientTest" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -424,11 +434,11 @@
       </method>
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.ReqresServer" />
-      <item index="1" class="java.lang.String" itemvalue="Application.ReqresCli" />
-      <item index="2" class="java.lang.String" itemvalue="Application.ConnectionGateway" />
-      <item index="3" class="java.lang.String" itemvalue="Application.ServiceServer" />
-      <item index="4" class="java.lang.String" itemvalue="Application.ClientSample" />
+      <item index="0" class="java.lang.String" itemvalue="Application.ServiceServer" />
+      <item index="1" class="java.lang.String" itemvalue="Application.ClientSample" />
+      <item index="2" class="java.lang.String" itemvalue="Application.ServerTest" />
+      <item index="3" class="java.lang.String" itemvalue="Application.ReqresServer" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ClientTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -536,7 +546,11 @@
       <created>1393487272825</created>
       <updated>1393487272825</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="优化ReplySnake接口">
+      <created>1393488980406</created>
+      <updated>1393488980406</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -605,7 +619,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化MessageBus.onReplyMessage接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化ReplySnake接口" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -630,6 +644,7 @@
     <MESSAGE value="增加非正常时的日志输出" />
     <MESSAGE value="优化HydraDestination接口" />
     <MESSAGE value="优化MessageBus.onReplyMessage接口" />
+    <MESSAGE value="优化ReplySnake接口" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -639,101 +654,122 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/MessageHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="22" selection-start="753" selection-end="753" vertical-scroll-proportion="-1.4242879" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Gateway.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="30" selection-start="234" selection-end="234" vertical-scroll-proportion="0.11694153" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="66" selection-start="1124" selection-end="1124" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ServerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="221" selection-end="221" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ClientTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="243" selection-end="243" vertical-scroll-proportion="0.033430234" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Destination.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="29" selection-start="59" selection-end="59" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/BroadcastDestination.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="147" selection-end="147" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/PollerDestination.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="48" selection-start="218" selection-end="218" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/DefaultMessageBus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="44" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/HydraDestination.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="25" selection-start="1062" selection-end="1062" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/ClientSample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="67" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.62913907">
-          <folding />
-        </state>
+        <state line="4" column="17" selection-start="78" selection-end="78" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/ServiceServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="54" selection-start="912" selection-end="912" vertical-scroll-proportion="0.5033113">
+        <state line="30" column="75" selection-start="836" selection-end="836" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample/log4j.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="3" selection-start="1839" selection-end="1839" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/ConnectionGateway.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="72" selection-start="724" selection-end="724" vertical-scroll-proportion="0.6379691">
+        <state line="28" column="33" selection-start="631" selection-end="631" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/MessageBus.java">
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Gateway.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="35" selection-start="2409" selection-end="2409" vertical-scroll-proportion="0.9227373">
-          <folding>
-            <element signature="e#538#558#0" expanded="true" />
-          </folding>
+        <state line="13" column="31" selection-start="235" selection-end="235" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/reply/OnReceivedPushMessageListener.java">
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="46" selection-start="263" selection-end="292" vertical-scroll-proportion="0.0">
+        <state line="239" column="30" selection-start="5682" selection-end="5682" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="17" selection-start="51" selection-end="51" vertical-scroll-proportion="0.119205296">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/Session.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="32" selection-start="1121" selection-end="1121" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionClosedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="38" selection-start="203" selection-end="224" vertical-scroll-proportion="0.37748346">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="95" column="38" selection-start="2773" selection-end="2773" vertical-scroll-proportion="0.5386313">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="57" selection-start="396" selection-end="396" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="16" selection-start="372" selection-end="372" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="73" selection-start="3186" selection-end="3186" vertical-scroll-proportion="0.29139072">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ClientTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="35" selection-start="699" selection-end="699" vertical-scroll-proportion="0.7549669">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="30" selection-start="1013" selection-end="1013" vertical-scroll-proportion="0.6467991">
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#707#730#0" expanded="true" />
+            <element signature="e#782#1258#0" expanded="true" />
+            <element signature="e#1254#1255#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lamfire/hydra/reply/ReplySnake.java">
+    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/packet/ServerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="111" selection-start="2063" selection-end="2063" vertical-scroll-proportion="0.70640177">
-          <folding />
+        <state line="35" column="22" selection-start="1282" selection-end="1282" vertical-scroll-proportion="0.7108168">
+          <folding>
+            <element signature="e#586#735#0" expanded="true" />
+            <element signature="e#728#729#0" expanded="true" />
+            <element signature="e#1093#1292#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -40,10 +40,11 @@ public abstract class MessageBus implements Runnable{
 	}
 
     public void addDestination(String name,Destination destination){
-        this.destinations.put(name, destination);
         if(destination instanceof HydraDestination){
-            ((HydraDestination)destination).setMessageBus(this);
+            addDestination(((HydraDestination)destination));
+            return;
         }
+        this.destinations.put(name, destination);
     }
 
 	public Gateway getGateway() {

@@ -17,7 +17,8 @@ import com.lamfire.utils.Sets;
 public class SessionGroup implements Iterable<Session>{
     private static final Logger LOGGER = Logger.getLogger(SessionGroup.class);
 	private final Lock lock = new ReentrantLock();
-	private final Map<Serializable, Session> group = new ConcurrentHashMap<Serializable, Session>();
+	private final ConcurrentHashMap<Serializable, Session> group = new ConcurrentHashMap<Serializable, Session>();
+    private Iterator<Entry<Serializable, Session>> groupIterator = null;
 
 	private final ChannelFutureListener remover = new ChannelFutureListener() {
 		public void operationComplete(ChannelFuture future) throws Exception {
@@ -32,6 +33,29 @@ public class SessionGroup implements Iterable<Session>{
             }
 		}
 	};
+
+    public Session getPollingNextSession(){
+        if(group.isEmpty()){
+              return null;
+        }
+        lock.lock();
+        try{
+            if(this.groupIterator == null){
+                this.groupIterator = this.group.entrySet().iterator();
+            }
+            if(this.groupIterator.hasNext()){
+                return this.groupIterator.next().getValue();
+            }
+        }catch (Throwable t){
+            this.groupIterator = null;
+            if(!group.isEmpty()){
+                return group.elements().nextElement();
+            }
+        } finally {
+            lock.unlock();
+        }
+        return null;
+    }
 
     private Session getSessionBySessionId(int sessionId){
         lock.lock();

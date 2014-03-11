@@ -12,16 +12,16 @@ import com.lamfire.hydra.net.Session;
  */
 class HeartbeatTask extends HydraTask {
 	private static final Logger LOGGER = Logger.getLogger(HeartbeatTask.class);
-	private Hydra river;
+	private Hydra hydra;
 	private final Map<Integer,Long> heatbeatTimeMap = new HashMap<Integer,Long>();//记录Session收到的心跳时间，用于对比Session是否断开。
 	private int heartbeatSeconds = 60;
 	private int maxWaitCount = 5;
 	private boolean sendHeartbeatRequestEnable = true;
 
 	
-	public HeartbeatTask(Hydra river){
+	public HeartbeatTask(Hydra hydra){
 		super("HEARTBEAT");
-		this.river = river;
+		this.hydra = hydra;
 	}
 
 	public boolean isSendHeartbeatRequestEnable() {
@@ -54,8 +54,10 @@ class HeartbeatTask extends HydraTask {
 	}
 
 	private void heartbeatCheck(){
-		Collection<Session> sessions = river.getSessions();
-		LOGGER.debug("["+getName()+"] : sessions("+sessions.size()+") - " + System.currentTimeMillis());
+		Collection<Session> sessions = hydra.getSessions();
+        if(LOGGER.isDebugEnabled()){
+		    LOGGER.debug("["+getName()+"] : Found alive sessions("+sessions.size()+")");
+        }
 		try{
 			for(Session session : sessions){
 				if(sendHeartbeatRequestEnable){
@@ -70,8 +72,8 @@ class HeartbeatTask extends HydraTask {
 					}
 				}
 			}
-		}catch(Exception e){
-			LOGGER.warn("["+getName()+"] : exception.",e);
+		}catch(Throwable e){
+			LOGGER.warn("["+getName()+"] :"+e.getMessage());
 		}
 	}
 

@@ -7,12 +7,12 @@ import com.lamfire.logger.Logger;
  */
 class AutoConnectTask extends HydraTask {
 	private static final Logger LOGGER = Logger.getLogger(AutoConnectTask.class);
-	private Hydra river;
+	private Hydra hydra;
 	private int keepaliveConnections = 1;
 	
-	public AutoConnectTask(Hydra river) {
+	public AutoConnectTask(Hydra hydra) {
 		super("AUTOCONNECT");
-		this.river = river;
+		this.hydra = hydra;
 	}
 	
 	
@@ -27,30 +27,36 @@ class AutoConnectTask extends HydraTask {
 		this.keepaliveConnections = keepaliveConnections;
 	}
 
-
+    private void reconnects(int conns){
+        try {
+            for (int i = 0; i < conns; i++) {
+                hydra.connect();
+            }
+            LOGGER.info("[SUCCESS]:reconnected("+conns+") to [" + hydra.getHost() + ":" + hydra.getPort()+"]");
+        }catch (Throwable e){
+            LOGGER.error("[FAILED]:"+e.getMessage());
+        }
+    }
 
 	@Override
 	public void run() {
 		try {
-			String host = river.getHost();
-			int port = river.getPort();
-			int conns = river.getSessions().size();
-			LOGGER.debug("[AUTOCONNECT]:The connections current[" + conns + "],keepalive[" + keepaliveConnections + "]");
+			String host = hydra.getHost();
+			int port = hydra.getPort();
+			int conns = hydra.getSessions().size();
+            if(LOGGER.isDebugEnabled()){
+			    LOGGER.debug("[Connection Check]:The connections current[" + conns + "],keepalive[" + keepaliveConnections + "]");
+            }
 			if (conns < keepaliveConnections) {
 				int count = keepaliveConnections - conns;
-				if (count > 8) {
+                LOGGER.info("[CONNECTING]:Try to reconnect to [" + host + ":" + port + "],connected[" + conns + "],keepalive[" + keepaliveConnections + "]");
+                if (count > 8) {
 					count /= 3;
-					for (int i = 0; i < count; i++) {
-						LOGGER.info("[AUTOCONNECT]:The connections current[" + conns + "],keepalive[" + keepaliveConnections + "],try connect to " + host + ":" + port);
-						river.connect();
-					}
-				} else {
-					LOGGER.info("[AUTOCONNECT]:The connections current[" + conns + "],keepalive[" + keepaliveConnections + "],try connect to " + host + ":" + port);
-					river.connect();
 				}
+				reconnects(count);
 			}
-		} catch (Exception e) {
-			LOGGER.error("[AUTOCONNECT]:"+e.getMessage(),e);
+		} catch (Throwable e) {
+			LOGGER.error("[EXCEPTION]:"+e.getMessage());
 		}
 	}
 

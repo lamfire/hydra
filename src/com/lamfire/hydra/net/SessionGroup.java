@@ -35,17 +35,15 @@ public class SessionGroup implements Iterable<Session>{
 	};
 
     public Session getPollingNextSession(){
-        if(group.isEmpty()){
-              return null;
-        }
         lock.lock();
         try{
-            if(this.groupIterator == null){
+            if(group.isEmpty()){
+                return null;
+            }
+            if(this.groupIterator == null || (!this.groupIterator.hasNext()) ){
                 this.groupIterator = this.group.entrySet().iterator();
             }
-            if(this.groupIterator.hasNext()){
-                return this.groupIterator.next().getValue();
-            }
+            return this.groupIterator.next().getValue();
         }catch (Throwable t){
             this.groupIterator = null;
             if(!group.isEmpty()){

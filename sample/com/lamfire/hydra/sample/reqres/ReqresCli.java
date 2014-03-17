@@ -39,6 +39,8 @@ public class ReqresCli {
 		LOGGER.info("[startup]:"+host + ":" +port  +" - "+ size);
 		ReplySnake cli = new ReplySnake(host,port);
 		cli.setKeepAlive(true);
+        cli.setKeepaliveConnsWithClient(4);
+        cli.setAutoConnectRetry(true);
 		cli.connect();
 
 		for(int i=0;i<10000000;i++){

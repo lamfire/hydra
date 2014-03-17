@@ -1,9 +1,7 @@
 package com.lamfire.hydra.net;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,8 +48,9 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
         return Collections.unmodifiableCollection(sessions.values());
 	}
 
-    protected void closeAllSessions(){
-        for(Session s : getSessions()){
+    protected synchronized void closeAllSessions(){
+        List<Session> list = new ArrayList<Session>(sessions.values());
+        for(Session s : list){
             s.close();
         }
         sessions.clear();

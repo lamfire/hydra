@@ -3,6 +3,8 @@ package com.lamfire.hydra;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.net.Session;
@@ -21,6 +23,7 @@ public abstract class MessageBus implements Runnable{
 	private final FixedQueue<Message> messageQueue;
 	private final ExecutorService scheduler = Executors.newFixedThreadPool(1, new ThreadFactory("MessageBus#Cache"));
 	private boolean running = true;
+    private Lock lock = new ReentrantLock();
 	
 	
 	public MessageBus(Gateway gateway){
@@ -34,17 +37,27 @@ public abstract class MessageBus implements Runnable{
 		this.scheduler.submit(this);
 	}
 	
-	public void addDestination(HydraDestination destination){
-		destination.setMessageBus(this);
-		this.destinations.put(destination.getName(), destination);
+	public synchronized void addDestination(HydraDestination destination){
+        try{
+            lock.lock();
+            destination.setMessageBus(this);
+            this.destinations.put(destination.getName(), destination);
+        }finally {
+            lock.unlock();
+        }
 	}
 
-    public void addDestination(String name,Destination destination){
-        if(destination instanceof HydraDestination){
-            addDestination(((HydraDestination)destination));
-            return;
+    public synchronized void addDestination(String name,Destination destination){
+        try{
+            lock.lock();
+            if(destination instanceof HydraDestination){
+                addDestination(((HydraDestination)destination));
+                return;
+            }
+            this.destinations.put(name, destination);
+        }finally {
+            lock.unlock();
         }
-        this.destinations.put(name, destination);
     }
 
 	public Gateway getGateway() {
@@ -87,29 +100,41 @@ public abstract class MessageBus implements Runnable{
     }
 	
 	private boolean hasAlivedDestination(){
-		for(Destination destination : this.destinations.values()){
-            if(!(destination instanceof  HydraDestination)){
-                 return true;
+        try{
+            lock.lock();
+            for(Destination destination : this.getDestinations().values()){
+                if(!(destination instanceof  HydraDestination)){
+                     return true;
+                }
+                HydraDestination hydra = (HydraDestination) destination;
+                if(hydra.hasConnections()){
+                    return true;
+                }
             }
-            HydraDestination hydra = (HydraDestination) destination;
-			if(hydra.hasConnections()){
-				return true;
-			}
-		}
-		return false;
+            return false;
+        }finally {
+            lock.unlock();
+        }
 	}
+
+    private synchronized void dispatchMessage(){
+        try{
+            if(hasAlivedDestination()){
+                Message message = messageQueue.pop();
+                onDispatch(getDestinations(),message);
+            } else{
+                LOGGER.warn("not found alive destination,waiting...");
+                this.wait(5000);
+            }
+        }catch (Throwable t){
+            LOGGER.warn(t.getMessage(),t);
+        }
+    }
 
 	@Override
 	public void run() {
 		while(running){
-            try{
-                if(hasAlivedDestination()){
-                    Message message = messageQueue.pop();
-                    onDispatch(getDestinations(),message);
-                }
-            }catch (Throwable t){
-                LOGGER.warn(t.getMessage(),t);
-            }
+            dispatchMessage();
 		}
 	}
 	

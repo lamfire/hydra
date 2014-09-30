@@ -25,7 +25,7 @@ public class EchoCli {
 
 		
 		Session session = executor.connect();
-		session.send(new Message(1001,ManagementFactory.getRuntimeMXBean().getName().getBytes()));
+		session.send(new Message(1001,"123456".getBytes()));
 	}
 	
 	static void usage(){
@@ -49,9 +49,9 @@ public class EchoCli {
 		}
 		
 		System.out.println("[startup]:"+host + ":" +port  +" - "+ size);
-		for(int i=0;i<size;i++){
+
 			EchoCli cli = new EchoCli();
 			cli.startup(host,port,size);
-		}
+
 	}
 }

@@ -21,13 +21,14 @@ public abstract class Snake extends Hydra {
 	}
 
 	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
-		Task task = new Task(context, session, buffer);
-        ExecutorService service = this.getExecutorService();
-        if(service == null){
-		    task.run();
-            return;
-        }
-        service.submit(task);
+        Message message = new Message();
+        message.decode(buffer);
+        MessageContext mc = new MessageContext();
+        mc.setContext(context);
+        mc.setSession(session);
+        mc.setMessage(message);
+        mc.setNodes(message.getLinks());
+        handleMessage(mc, message);
 	}
 	
 	protected abstract void handleMessage(final MessageContext context,final Message message);
@@ -36,30 +37,5 @@ public abstract class Snake extends Hydra {
 	public void shutdown() {
 		super.shutdown();
 	}
-	
-	class Task implements Runnable{
-		Context context; 
-		Session session; 
-		ByteBuffer buffer;
 
-		public Task(Context context, Session session, ByteBuffer buffer) {
-			super();
-			this.context = context;
-			this.session = session;
-			this.buffer = buffer;
-		}
-
-		@Override
-		public void run() {
-			Message message = new Message();
-			message.decode(buffer);
-			MessageContext mc = new MessageContext();
-			mc.setContext(this.context);
-			mc.setSession(this.session);
-			mc.setMessage(message);
-			mc.setNodes(message.getLinks());
-			handleMessage(mc, message);
-		}
-		
-	}
 }

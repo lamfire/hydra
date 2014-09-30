@@ -2,8 +2,6 @@ package com.lamfire.hydra.net;
 
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -14,13 +12,11 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.lamfire.logger.Logger;
 import com.lamfire.utils.Maps;
-import com.lamfire.utils.ThreadFactory;
 
 abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implements Context{
 	private static final Logger LOGGER = Logger.getLogger(SessionEventHandler.class);
 	private final Map<Integer,Session> sessions = Maps.newHashMap();//所有的SESSION
-	private ExecutorService service = null;
-	
+
 	private SessionEventListener sessionEventListener;
 	private MessageHandler messageHandler;
 
@@ -28,10 +24,6 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		this.sessionEventListener = listener;
 	}
 
-    public void setExecutorService(ExecutorService service){
-        this.service = service;
-    }
-	
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
 	}
@@ -58,10 +50,6 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 
 	public synchronized void shutdown() {
         closeAllSessions();
-        if(service != null){
-            service.shutdown();
-            service = null;
-        }
 	}
 
 	@Override
@@ -96,14 +84,8 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		Session session = sessions.get(e.getChannel().getId());
 		
 		//sync execute ?
-		//SessionUtils.onMessageReceived(this,messageHandler, session, buffer);
-		
-		//
-		Task task = new Task(this,session,buffer);
-        if(service != null){
-		    service.submit(task);
-        }   else{
-            task.run();
+        if(session != null){
+		    SessionUtils.onMessageReceived(this,messageHandler, session, buffer);
         }
 	}
 	
@@ -168,23 +150,5 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("exceptionCaught:"+session,e.getCause());
 		}
-	}
-	
-	class Task implements Runnable{
-		Context context; 
-		Session session; 
-		ByteBuffer buffer;
-
-		public Task(Context context, Session session, ByteBuffer buffer) {
-			this.context = context;
-			this.session = session;
-			this.buffer = buffer;
-		}
-
-		@Override
-		public void run() {
-			SessionUtils.onMessageReceived(context,messageHandler, session, buffer);
-		}
-		
 	}
 }

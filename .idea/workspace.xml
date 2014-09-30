@@ -2,17 +2,15 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="hydra" />
+      <artifact name="hydra-1.0.8" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e61e5a5b-5462-4867-8129-954ff9c34be9" name="Default" comment="">
+    <list default="true" id="e61e5a5b-5462-4867-8129-954ff9c34be9" name="Default" comment="去掉了用户相关的业务线程模型，使hydra聚焦在IO线程本身.">
+      <change type="DELETED" beforePath="D:\workspaces\idea\hydra\.idea\artifacts\hydra.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" afterPath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/BroadcastEchoServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/EchoCli.java" afterPath="$PROJECT_DIR$/sample/com/lamfire/hydra/sample/echo/EchoCli.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/Hydra.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/Snake.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/Snake.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" afterPath="$PROJECT_DIR$/src/com/lamfire/hydra/net/SessionEventHandler.java" />
+      <change type="MOVED" beforePath="D:\workspaces\idea\hydra\.idea\artifacts\hydra.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/hydra_1_0_8.xml" />
     </list>
     <ignored path="hydra.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,7 +67,26 @@
     <favorites_list name="hydra" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="ReqresServer.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresServer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="32" selection-start="872" selection-end="872" vertical-scroll-proportion="0.56801194">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReqresCli.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresCli.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="72" selection-start="974" selection-end="974" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -134,16 +151,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -176,6 +183,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hydra" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hydra" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -183,7 +214,7 @@
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -587,7 +618,11 @@
       <created>1397009668427</created>
       <updated>1397009668427</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="去掉了用户相关的业务线程模型，使hydra聚焦在IO线程本身.">
+      <created>1412045564829</created>
+      <updated>1412045564829</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -659,7 +694,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复加入目的地时,跌代器异常的错误" />
+    <option name="LAST_COMMIT_MESSAGE" value="去掉了用户相关的业务线程模型，使hydra聚焦在IO线程本身." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -690,6 +725,7 @@
     <MESSAGE value="增加内部循环跌带器" />
     <MESSAGE value="修复closeAllSessions时集合不支持的BUG" />
     <MESSAGE value="修复加入目的地时,跌代器异常的错误" />
+    <MESSAGE value="去掉了用户相关的业务线程模型，使hydra聚焦在IO线程本身." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -783,16 +819,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresServer.java">
+    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresCli.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="82" selection-start="664" selection-end="664" vertical-scroll-proportion="0.0">
+        <state line="35" column="72" selection-start="974" selection-end="974" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresCli.java">
+    <entry file="file://$PROJECT_DIR$/sample/com/lamfire/hydra/sample/reqres/ReqresServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="87" selection-start="978" selection-end="978" vertical-scroll-proportion="0.49775785">
+        <state line="35" column="32" selection-start="872" selection-end="872" vertical-scroll-proportion="0.56801194">
           <folding />
         </state>
       </provider>
@@ -803,7 +839,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>hydra</last-edited>
+          <last-edited>hydra-1.0.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

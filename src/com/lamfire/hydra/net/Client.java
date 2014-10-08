@@ -1,6 +1,7 @@
 package com.lamfire.hydra.net;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -20,6 +21,8 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 	private static final Logger LOGGER = Logger.getLogger(Client.class);
 	private ClientBootstrap bootstrap;
 	private ChannelFactory channelFactory;
+    private ExecutorService bossExecutor;
+    private ExecutorService workerExecutor;
 	private String host;
 	private int port;
 	private boolean shutdowning = false;
@@ -27,9 +30,6 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 	public Client(String host, int port) {
         this.host = host;
         this.port = port;
-        channelFactory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-        bootstrap = new ClientBootstrap(channelFactory);
-        bootstrap.setPipelineFactory(this);
     }
 
 	public Client(String host, int port, SessionEventListener listener) {
@@ -47,6 +47,23 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 			throw new RuntimeException("The client was shutdown,cannot open new connection.");
 		}
 		LOGGER.debug(String.format("Connecting to %s:%d", host, port));
+
+
+        if(bossExecutor == null){
+            bossExecutor = Executors.newCachedThreadPool();
+        }
+        if(workerExecutor == null){
+            workerExecutor = Executors.newFixedThreadPool(4);
+        }
+
+        if(channelFactory == null){
+            channelFactory = new NioClientSocketChannelFactory(bossExecutor, workerExecutor);
+        }
+        if(bootstrap == null){
+            bootstrap = new ClientBootstrap(channelFactory);
+            bootstrap.setPipelineFactory(this);
+        }
+
 		ChannelFuture future = bootstrap.connect(new InetSocketAddress(host, port));
 		
 		Channel channel = future.getChannel();
@@ -57,6 +74,14 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 		}
 		return new SessionImpl(channel);
 	}
+
+    public void setBossExecutor(ExecutorService bossExecutor) {
+        this.bossExecutor = bossExecutor;
+    }
+
+    public void setWorkerExecutor(ExecutorService workerExecutor) {
+        this.workerExecutor = workerExecutor;
+    }
 
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline pipeline = Channels.pipeline();

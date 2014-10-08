@@ -39,6 +39,8 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	private int maxWaitWithHeartbeat = 5;
 	private boolean keepAlive = false;
 	private boolean autoConnectRetry = false;
+    private ExecutorService bossExecutor;
+    private ExecutorService workerExecutor;
 
 	public Hydra(String host, int port) {
 		this.host = host;
@@ -46,6 +48,14 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		this.heartbeatTask = new HeartbeatTask(this);
 		this.autoConnectTask = new AutoConnectTask(this);
 	}
+
+    public void setBossExecutor(ExecutorService bossExecutor) {
+        this.bossExecutor = bossExecutor;
+    }
+
+    public void setWorkerExecutor(ExecutorService workerExecutor) {
+        this.workerExecutor = workerExecutor;
+    }
 
 	public int getHearbeatIntervalTime() {
 		return hearbeatIntervalTime;
@@ -147,6 +157,8 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	public synchronized Session connect() {
 		if (client == null) {
 			client = new Client(host, port);
+            client.setBossExecutor(bossExecutor);
+            client.setWorkerExecutor(workerExecutor);
 			client.setMessageHandler(this);
 			client.setSessionEventListener(this);
 			if(this.autoConnectRetry){
@@ -194,6 +206,8 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 			return;
 		}
 		server = new Server(host, port);
+        server.setBossExecutor(bossExecutor);
+        server.setWorkerExecutor(workerExecutor);
 		server.setMessageHandler(this);
 		server.setSessionEventListener(this);
 		server.bind();

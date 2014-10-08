@@ -1,6 +1,7 @@
 package com.lamfire.hydra.net;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
@@ -16,6 +17,8 @@ import com.lamfire.logger.Logger;
 public class Server extends SessionEventHandler implements ChannelPipelineFactory{
 	private static final Logger LOGGER = Logger.getLogger(Server.class);
 
+    private ExecutorService bossExecutor;
+    private ExecutorService workerExecutor;
 	private ServerBootstrap bootstrap = null;
 	private ChannelFactory channelFactory= null;
 	private Channel listenerChannel = null;
@@ -37,12 +40,26 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 		this(bind, port);
 		this.setSessionEventListener(listener);
 	}
-	
-	public synchronized void bind(){
+
+    public void setBossExecutor(ExecutorService bossExecutor) {
+        this.bossExecutor = bossExecutor;
+    }
+
+    public void setWorkerExecutor(ExecutorService workerExecutor) {
+        this.workerExecutor = workerExecutor;
+    }
+
+    public synchronized void bind(){
 		if(listenerChannel != null){
 			return ;
 		}
-		channelFactory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
+        if(bossExecutor == null){
+            bossExecutor = Executors.newCachedThreadPool();
+        }
+        if(workerExecutor == null){
+            workerExecutor = Executors.newFixedThreadPool(4);
+        }
+		channelFactory = new NioServerSocketChannelFactory(bossExecutor,workerExecutor);
 		bootstrap = new ServerBootstrap(channelFactory);
 		
 		// Set up the default event pipeline.

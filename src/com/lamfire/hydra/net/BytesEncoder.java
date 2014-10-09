@@ -21,14 +21,14 @@ public class BytesEncoder extends SimpleChannelHandler{
 	
 	protected  ChannelBuffer encode(ByteBuffer buf){
 		buf.flip();
-		ChannelBuffer buffer = ChannelBuffers.buffer(DATA_HEADER_LENGTH + buf.capacity());
+		ChannelBuffer buffer = ChannelBuffers.directBuffer(DATA_HEADER_LENGTH + buf.capacity());
 		buffer.writeInt(buf.capacity());
 		buffer.writeBytes(buf.array());
 		return buffer;
 	}
 	
 	protected  ChannelBuffer encode(byte[] bytes){
-		ChannelBuffer buffer = ChannelBuffers.buffer(DATA_HEADER_LENGTH + bytes.length);
+		ChannelBuffer buffer = ChannelBuffers.directBuffer(DATA_HEADER_LENGTH + bytes.length);
 		buffer.writeInt(bytes.length);
 		buffer.writeBytes(bytes);
 		return buffer;

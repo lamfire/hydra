@@ -1,11 +1,11 @@
 package com.lamfire.hydra;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.ExecutorService;
 
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Context;
+import com.lamfire.hydra.Session;
 
 /**
  * 蛇
@@ -20,9 +20,7 @@ public abstract class Snake extends Hydra {
 		super(host,port);
 	}
 
-	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
-        Message message = new Message();
-        message.decode(buffer);
+	public void onMessageReceived(Context context, Session session, Message message) {
         MessageContext mc = new MessageContext();
         mc.setContext(context);
         mc.setSession(session);

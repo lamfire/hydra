@@ -6,8 +6,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Session;
 import com.lamfire.hydra.utils.FixedQueue;
 import com.lamfire.utils.ThreadFactory;
 

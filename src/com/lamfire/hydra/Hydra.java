@@ -7,15 +7,15 @@ import java.util.concurrent.Executors;
 
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.exception.NotSupportedMethodException;
-import com.lamfire.hydra.net.Client;
-import com.lamfire.hydra.net.Clientable;
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.HeatbeatType;
-import com.lamfire.hydra.net.MessageHandler;
-import com.lamfire.hydra.net.Server;
-import com.lamfire.hydra.net.Serverable;
-import com.lamfire.hydra.net.Session;
-import com.lamfire.hydra.net.SessionEventListener;
+import com.lamfire.hydra.Client;
+import com.lamfire.hydra.Clientable;
+import com.lamfire.hydra.Context;
+import com.lamfire.hydra.HeatbeatType;
+import com.lamfire.hydra.MessageHandler;
+import com.lamfire.hydra.Server;
+import com.lamfire.hydra.Serverable;
+import com.lamfire.hydra.Session;
+import com.lamfire.hydra.SessionEventListener;
 import com.lamfire.utils.Threads;
 
 /**

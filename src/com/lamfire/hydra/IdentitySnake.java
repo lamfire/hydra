@@ -1,6 +1,8 @@
 package com.lamfire.hydra;
 
 
+import com.lamfire.hydra.Message;
+
 public class IdentitySnake extends Snake {
 	private MessageMapper mapper;
 	

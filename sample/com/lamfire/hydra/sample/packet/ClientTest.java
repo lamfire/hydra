@@ -1,13 +1,9 @@
 package com.lamfire.hydra.sample.packet;
 
-import java.nio.ByteBuffer;
 
-import com.lamfire.hydra.net.Client;
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.MessageHandler;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.*;
 
-public class ClientTest extends Client implements MessageHandler{
+public class ClientTest extends Client implements MessageHandler {
 
 	public ClientTest(String bind, int port) {
 		super(bind, port);
@@ -18,21 +14,16 @@ public class ClientTest extends Client implements MessageHandler{
 		test.setMessageHandler(test);
 		Session s = test.connect();
 		byte[] bytes = "heelo lamfire".getBytes();
-		ByteBuffer buffer = ByteBuffer.allocate(4 + bytes.length);
-		buffer.putInt(bytes.length);
-		buffer.put(bytes);
-		s.send(buffer);
+
+        Message message = new Message(0,bytes);
+		s.send(message);
 		
 	}
 
 	@Override
-	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
-		buffer.flip();
-		int len =  buffer.getInt();
-		byte[] bytes = new byte[len];
-		buffer.get(bytes);
-		System.out.println(new String(bytes));
-		session.send(buffer);
+	public void onMessageReceived(Context context, Session session, Message message) {
+		System.out.println(new String(message.getBody()));
+		session.send(message);
 	}
 
 }

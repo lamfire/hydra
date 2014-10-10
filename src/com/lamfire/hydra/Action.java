@@ -1,6 +1,8 @@
 package com.lamfire.hydra;
 
 
+import com.lamfire.hydra.Message;
+
 /**
  * 消息处理接口
  * @author lamfire

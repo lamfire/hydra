@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 /**
  * 心跳消息类型

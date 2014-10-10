@@ -2,6 +2,7 @@ package com.lamfire.hydra;
 
 import java.util.Map;
 
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
 
 /**

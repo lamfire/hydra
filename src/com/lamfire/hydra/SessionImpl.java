@@ -1,7 +1,6 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
@@ -13,7 +12,6 @@ import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.Channels;
 
 import com.lamfire.logger.Logger;
-import com.lamfire.hydra.packet.Packet;
 import com.lamfire.utils.Maps;
 
 public class SessionImpl implements Session, Comparable<Session> {
@@ -59,16 +57,6 @@ public class SessionImpl implements Session, Comparable<Session> {
 		return this.channel.getId();
 	}
 
-	protected Future sendDatas(Object datas) {
-		if (!this.channel.isConnected()) {
-			throw new SessionException("The channel was closed,cannot write message.");
-		}
-		ChannelFuture future = Channels.write(channel, datas);
-        incSendCounter();
-        future.addListener(this.sendCompleteListener);
-		return new Future(this, future);
-	}
-
     public long getSendCount(){
         return sendCounter.get();
     }
@@ -96,16 +84,14 @@ public class SessionImpl implements Session, Comparable<Session> {
         return sessionClosedListener;
     }
 
-    public Future send(byte[] bytes) {
-		return sendDatas(bytes);
-	}
-
-	public Future send(ByteBuffer buffer) {
-		return sendDatas(buffer.array());
-	}
-
-	public Future send(Packet<?> packet) {
-		return sendDatas(packet.encode().array());
+	public Future send(Message message) {
+        if (!this.channel.isConnected()) {
+            throw new SessionException("The channel was closed,cannot write message.");
+        }
+        ChannelFuture future = Channels.write(channel, message);
+        incSendCounter();
+        future.addListener(this.sendCompleteListener);
+        return new Future(this, future);
 	}
 
 	public SocketAddress getRemoteAddress() {

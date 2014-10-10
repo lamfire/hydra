@@ -1,9 +1,10 @@
 package com.lamfire.hydra.sample.echo;
 
 import com.lamfire.hydra.*;
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.Snake;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Session;
 
 public class BroadcastEchoServer {
 	private static final Logger LOGGER = Logger.getLogger(BroadcastEchoServer.class);

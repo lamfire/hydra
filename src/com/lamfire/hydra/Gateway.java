@@ -2,9 +2,10 @@ package com.lamfire.hydra;
 
 import java.nio.ByteBuffer;
 
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Context;
+import com.lamfire.hydra.Session;
 
 /**
  * 消息路由
@@ -27,13 +28,12 @@ public class Gateway extends Hydra {
 	
 
 	@Override
-	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
+	public void onMessageReceived(Context context, Session session, Message message) {
 		if(bus == null){
 			LOGGER.warn("The 'Bus' not found,received message was be igrone.");
 			return;
 		}
-		Message message = new Message();
-		message.decode(buffer);
+
 		bus.onRouterMessage(session, message);
 		
 		if(LOGGER.isDebugEnabled()){

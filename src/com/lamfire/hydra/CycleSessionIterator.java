@@ -6,7 +6,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.lamfire.hydra.exception.NotSupportedMethodException;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Session;
 
 public class CycleSessionIterator implements Iterator<Session>{
 	private Hydra hydra;

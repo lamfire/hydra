@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 public class SessionException extends RuntimeException{
 

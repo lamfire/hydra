@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -74,18 +74,18 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 			SessionUtils.onHeatbeat(this, sessionEventListener, session,(HeatbeatType)e.getMessage());
 			return;
 		}
-		if (!(e.getMessage() instanceof ByteBuffer)) {
+		if (!(e.getMessage() instanceof Message)) {
 			//ctx.sendUpstream(e);
 			return;
 		}
 		
 		
-		ByteBuffer buffer = (ByteBuffer)e.getMessage();
+		Message message = (Message)e.getMessage();
 		Session session = sessions.get(e.getChannel().getId());
 		
 		//sync execute ?
         if(session != null){
-		    SessionUtils.onMessageReceived(this,messageHandler, session, buffer);
+		    SessionUtils.onMessageReceived(this,messageHandler, session, message);
         }
 	}
 	

@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
@@ -85,8 +85,8 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline pipeline = Channels.pipeline();
-		pipeline.addLast("decoder", new BytesDecoder());
-		pipeline.addLast("encoder", new BytesEncoder());
+		pipeline.addLast("decoder", new HydraMessageDecoder());
+		pipeline.addLast("encoder", new HydraMessageEncoder());
 		pipeline.addLast("handler", this);
 		return pipeline;
 	}

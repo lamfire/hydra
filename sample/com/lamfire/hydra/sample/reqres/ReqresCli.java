@@ -1,16 +1,8 @@
 package com.lamfire.hydra.sample.reqres;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.lamfire.hydra.Snake;
 import com.lamfire.hydra.reply.ReplyFuture;
 import com.lamfire.hydra.reply.ReplySnake;
 import com.lamfire.logger.Logger;
-import com.lamfire.hydra.CycleSessionIterator;
-import com.lamfire.hydra.Message;
-import com.lamfire.hydra.MessageContext;
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.Session;
 
 public class ReqresCli {
 	private static final Logger LOGGER = Logger.getLogger(ReqresCli.class);

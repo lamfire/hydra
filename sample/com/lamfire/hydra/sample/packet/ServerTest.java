@@ -1,14 +1,12 @@
 package com.lamfire.hydra.sample.packet;
 
-import java.nio.ByteBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.lamfire.code.PUID;
-import com.lamfire.hydra.net.*;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
+import com.lamfire.hydra.*;
+
 
 public class ServerTest extends Server implements MessageHandler,SessionEventListener{
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -73,8 +71,8 @@ public class ServerTest extends Server implements MessageHandler,SessionEventLis
 	}
 
 	@Override
-	public void onMessageReceived(Context context, Session session, ByteBuffer buffer) {
-		session.send(buffer);
+	public void onMessageReceived(Context context, Session session, Message message) {
+		session.send(message);
 	}
 
 }

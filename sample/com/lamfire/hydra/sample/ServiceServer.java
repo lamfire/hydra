@@ -1,6 +1,7 @@
 package com.lamfire.hydra.sample;
 
 import com.lamfire.hydra.*;
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.Snake;
 

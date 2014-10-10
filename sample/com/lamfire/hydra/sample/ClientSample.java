@@ -3,9 +3,10 @@ package com.lamfire.hydra.sample;
 import java.lang.management.ManagementFactory;
 
 import com.lamfire.hydra.*;
+import com.lamfire.hydra.Message;
 import com.lamfire.logger.Logger;
 import com.lamfire.hydra.Snake;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Session;
 
 public class ClientSample {
 	private static final Logger LOGGER = Logger.getLogger(ClientSample.class);

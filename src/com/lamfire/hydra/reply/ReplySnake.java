@@ -4,7 +4,7 @@ import com.lamfire.hydra.CycleSessionIterator;
 import com.lamfire.hydra.Message;
 import com.lamfire.hydra.MessageContext;
 import com.lamfire.hydra.Snake;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Session;
 import com.lamfire.logger.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;

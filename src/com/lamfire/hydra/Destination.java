@@ -1,5 +1,7 @@
 package com.lamfire.hydra;
 
+import com.lamfire.hydra.Message;
+
 /**
  * 消息调度目的地
  * User: lamfire

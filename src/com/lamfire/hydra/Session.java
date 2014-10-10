@@ -1,12 +1,10 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.jboss.netty.channel.Channel;
 
-import com.lamfire.hydra.packet.Packet;
 /**
  * 会话接口
  * 用于标识一个连接,及获取该连接的属性
@@ -15,9 +13,7 @@ import com.lamfire.hydra.packet.Packet;
  */
 public interface Session{
 	public int getSessionId();
-	public Future send(byte[] bytes);
-	public Future send(ByteBuffer buffer);
-	public Future send(Packet<?> packet);
+	public Future send(Message message);
 	public Future sendHeatbeatRequest();
 	public Future sendHeatbeatReply();
 	public SocketAddress getRemoteAddress();

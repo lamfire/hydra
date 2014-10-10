@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.nio.ByteBuffer;
 
@@ -47,9 +47,9 @@ public class SessionUtils {
 		}
 	}
 	
-	static void onMessageReceived(Context context,MessageHandler handler ,Session s,ByteBuffer buffer){
+	static void onMessageReceived(Context context,MessageHandler handler ,Session s,Message message){
 		if(handler != null && s != null){
-			handler.onMessageReceived(context,s,buffer);
+			handler.onMessageReceived(context,s,message);
 		}
 	}
 }

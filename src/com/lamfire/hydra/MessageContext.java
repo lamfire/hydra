@@ -3,8 +3,9 @@ package com.lamfire.hydra;
 import java.net.SocketAddress;
 import java.util.Stack;
 
-import com.lamfire.hydra.net.Context;
-import com.lamfire.hydra.net.Session;
+import com.lamfire.hydra.Context;
+import com.lamfire.hydra.Message;
+import com.lamfire.hydra.Session;
 
 public class MessageContext {
 	private Context context;

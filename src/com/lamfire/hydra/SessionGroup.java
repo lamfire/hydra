@@ -1,4 +1,4 @@
-package com.lamfire.hydra.net;
+package com.lamfire.hydra;
 
 import java.io.Serializable;
 import java.util.*;
@@ -6,8 +6,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.lamfire.hydra.packet.Packet;
 import com.lamfire.logger.Logger;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -109,8 +107,14 @@ public class SessionGroup implements Iterable<Session>{
 
     private void send(Session session , byte[] bytes){
          if(session.isConnected() && session.isSendable()){
-             session.send(bytes);
+             session.send(new Message(0,bytes));
          }
+    }
+
+    private void send(Session session , Message message){
+        if(session.isConnected() && session.isSendable()){
+            session.send(message);
+        }
     }
 
     public void broadcast(byte[] bytes){
@@ -119,9 +123,9 @@ public class SessionGroup implements Iterable<Session>{
         }
     }
 
-    public void broadcast(Packet<?> packet){
+    public void broadcast(Message message){
         for(Session session :  sessions()){
-            send(session,packet.encode().array());
+            send(session,message);
         }
     }
 

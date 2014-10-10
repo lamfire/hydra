@@ -14,10 +14,12 @@ public class BytesDecoder extends FrameDecoder{
 		if (source.readableBytes() < DATA_HEADER_LENGTH) {
 			return null;
 		}
+        int readindex = source.readerIndex();
 		source.markReaderIndex();
 		try {
 			int length = source.readInt();
-			
+            readindex +=DATA_HEADER_LENGTH;
+
 			//长度为0表示心跳请求
 			if(length == 0){
 				return HeatbeatType.Request;
@@ -35,6 +37,8 @@ public class BytesDecoder extends FrameDecoder{
 			}
 			ByteBuffer buffer = ByteBuffer.allocate(length);
 			source.readBytes(buffer);
+            readindex += length;
+            source.readerIndex(readindex);
 			return buffer;
 		} catch (Exception e) {
 			source.resetReaderIndex();

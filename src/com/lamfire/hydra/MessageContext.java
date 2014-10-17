@@ -13,23 +13,14 @@ public class MessageContext {
 	private Stack<Integer> nodes;
 	private Message message;
 	
-	/**
-	 * 创建回复消息
-	 * @return
-	 */
-	public Message makeMessage(){
-		Message reply = new Message();
-		reply.addAllLinks(nodes);
-		return reply;
-	}
-	
+
 	/**
 	 * 创建回复消息
 	 * @param id
 	 * @param bytes
 	 * @return
 	 */
-	public Message makeMessage(int id,byte[] bytes){
+	Message makeReplyMessage(int id,byte[] bytes){
 		Message reply = new Message();
 		reply.setId(id);
 		reply.setBody(bytes);
@@ -38,12 +29,18 @@ public class MessageContext {
 	}
 	
 	public void send(int id,byte[] data){
-		session.send(makeMessage(id,data));
+		session.send(makeReplyMessage(id,data));
 	}
 
 	public void send(int id,String data){
 		send(id,data.getBytes());
 	}
+
+    public void send(Message message){
+        message.clearLinks();
+        message.addAllLinks(nodes);
+        session.send(message);
+    }
 
 	public int getSessionId(){
 		return session.getSessionId();

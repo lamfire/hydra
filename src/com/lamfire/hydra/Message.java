@@ -36,8 +36,15 @@ public final class Message{
 	}
 
     protected synchronized void addAllLinks(List<Integer> list) {
+        if(list == null || list.isEmpty()){
+            return;
+        }
 		this.links.addAll(list);
 	}
+
+    protected void clearLinks(){
+        this.links.clear();
+    }
 
 	protected int getLink(int index) {
 		return this.links.get(index);

@@ -15,7 +15,7 @@ public class ReplyFuture {
 
     private static final Logger LOGGER = Logger.getLogger(ReplyFuture.class);
     private int messageId;
-    private long readTimeoutMillis = 15000;
+    private long readTimeoutMillis = 120000;
     private Message message;
 
 

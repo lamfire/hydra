@@ -33,7 +33,7 @@ public class ReplySnake extends Snake{
         ReplyFuture future = new ReplyFuture(id);
         replyQueue.add(future);
         Session session = it.nextAvailableSession();
-        session.send(new Message(id,bytes));
+        session.send(new Message(id,bytes)).awaitUninterruptibly();
         return future;
     }
 

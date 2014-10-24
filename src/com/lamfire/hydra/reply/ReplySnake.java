@@ -1,10 +1,6 @@
 package com.lamfire.hydra.reply;
 
-import com.lamfire.hydra.CycleSessionIterator;
-import com.lamfire.hydra.Message;
-import com.lamfire.hydra.MessageContext;
-import com.lamfire.hydra.Snake;
-import com.lamfire.hydra.Session;
+import com.lamfire.hydra.*;
 import com.lamfire.logger.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,13 +24,39 @@ public class ReplySnake extends Snake{
         it = new CycleSessionIterator(this);
     }
 
-    public ReplyFuture send(byte[] bytes){
+    public Future sendOnly(byte[] bytes){
         int id = atimic.getAndIncrement();
-        ReplyFuture future = new ReplyFuture(id);
-        replyQueue.add(future);
         Session session = it.nextAvailableSession();
-        session.send(new Message(id,bytes)).awaitUninterruptibly();
-        return future;
+        return session.send(new Message(id, bytes));
+    }
+
+    public byte[] send(byte[] bytes){
+        int id = atimic.getAndIncrement();
+        try{
+            ReplyFuture future = new ReplyFuture(id);
+            replyQueue.add(future);
+            Session session = it.nextAvailableSession();
+            session.send(new Message(id,bytes)).awaitUninterruptibly();
+            byte[] result = future.getReply();
+            return result;
+        }finally{
+            replyQueue.remove(id);
+        }
+    }
+
+    public byte[] send(byte[] bytes,long timeout){
+        int id = atimic.getAndIncrement();
+        try{
+            ReplyFuture future = new ReplyFuture(id);
+            future.setReadTimeoutMillis(timeout);
+            replyQueue.add(future);
+            Session session = it.nextAvailableSession();
+            session.send(new Message(id,bytes)).awaitUninterruptibly();
+            byte[] result = future.getReply();
+            return result;
+        }finally{
+            replyQueue.remove(id);
+        }
     }
 
     @Override

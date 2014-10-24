@@ -24,4 +24,8 @@ public class ReplyWaitQueue {
     public ReplyFuture take(int messageId){
         return waits.remove(messageId);
     }
+
+    public ReplyFuture remove(int messageId){
+        return waits.remove(messageId);
+    }
 }

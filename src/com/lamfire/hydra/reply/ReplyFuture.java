@@ -11,7 +11,7 @@ import com.lamfire.logger.Logger;
  * Time: 下午6:04
  * To change this template use File | Settings | File Templates.
  */
-public class ReplyFuture {
+class ReplyFuture {
 
     private static final Logger LOGGER = Logger.getLogger(ReplyFuture.class);
     private int messageId;

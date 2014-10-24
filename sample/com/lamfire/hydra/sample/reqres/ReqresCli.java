@@ -1,6 +1,5 @@
 package com.lamfire.hydra.sample.reqres;
 
-import com.lamfire.hydra.reply.ReplyFuture;
 import com.lamfire.hydra.reply.ReplySnake;
 import com.lamfire.logger.Logger;
 
@@ -36,8 +35,8 @@ public class ReqresCli {
 		cli.connect();
 
 		for(int i=0;i<10000000;i++){
-			ReplyFuture future = cli.send(String.valueOf(i).getBytes());
-			System.out.println(new String(future.getReply()));
+			byte[] bytes = cli.send(String.valueOf(i).getBytes());
+			System.out.println(new String(bytes));
 		}
 	}
 

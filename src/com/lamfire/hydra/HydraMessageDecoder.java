@@ -58,8 +58,11 @@ public class HydraMessageDecoder extends FrameDecoder{
         int id = buf.readInt();
 
         int bodyLength = length - 4 - 1 - links * 4;
-        byte[] body = new byte[bodyLength];
-        buf.readBytes(body);
+        byte[] body = null;
+        if(bodyLength > 0){
+            body = new byte[bodyLength];
+            buf.readBytes(body);
+        }
         m.setId(id);
         m.setBody(body);
         return m;

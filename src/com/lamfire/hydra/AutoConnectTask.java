@@ -45,11 +45,11 @@ class AutoConnectTask extends HydraTask {
 			int port = hydra.getPort();
 			int conns = hydra.getSessions().size();
             if(LOGGER.isDebugEnabled()){
-			    LOGGER.debug("[Connection Check]:The connections current[" + conns + "],keepalive[" + keepaliveConnections + "]");
+			    LOGGER.debug("[RECONNECT STATUS]:[" + host + ":" + port + "] connections=" + conns + "/" + keepaliveConnections);
             }
 			if (conns < keepaliveConnections) {
 				int count = keepaliveConnections - conns;
-                LOGGER.info("[CONNECTING]:Try to reconnect to [" + host + ":" + port + "],connected[" + conns + "],keepalive[" + keepaliveConnections + "]");
+                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + host + ":" + port + "],connections=" + conns + "/" + keepaliveConnections );
                 if (count > 8) {
 					count /= 3;
 				}

@@ -23,6 +23,9 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 	private ChannelFactory channelFactory= null;
 	private Channel listenerChannel = null;
 
+    private int bossThreads = 2;
+    private int workerThreads = 4;
+
 	private String bind;
 	private int port;
 	
@@ -41,23 +44,31 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 		this.setSessionEventListener(listener);
 	}
 
-    public void setBossExecutor(ExecutorService bossExecutor) {
-        this.bossExecutor = bossExecutor;
+    public int getBossThreads() {
+        return bossThreads;
     }
 
-    public void setWorkerExecutor(ExecutorService workerExecutor) {
-        this.workerExecutor = workerExecutor;
+    public void setBossThreads(int bossThreads) {
+        this.bossThreads = bossThreads;
     }
 
-    public synchronized void bind(){
+    public int getWorkerThreads() {
+        return workerThreads;
+    }
+
+    public void setWorkerThreads(int workerThreads) {
+        this.workerThreads = workerThreads;
+    }
+
+    public void bind(){
 		if(listenerChannel != null){
 			return ;
 		}
         if(bossExecutor == null){
-            bossExecutor = Executors.newCachedThreadPool();
+            bossExecutor = Executors.newFixedThreadPool(bossThreads);
         }
         if(workerExecutor == null){
-            workerExecutor = Executors.newFixedThreadPool(4);
+            workerExecutor = Executors.newFixedThreadPool(workerThreads);
         }
 		channelFactory = new NioServerSocketChannelFactory(bossExecutor,workerExecutor);
 		bootstrap = new ServerBootstrap(channelFactory);
@@ -72,24 +83,35 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 		LOGGER.debug("Success bind to " +bind +":" +port);
 	}
 
-	public synchronized void shutdown(){
+	public void shutdown(){
 		super.shutdown();
+
+        if(this.bossExecutor != null){
+            this.bossExecutor.shutdown();;
+            this.bossExecutor = null;
+        }
+
+        if(this.workerExecutor != null){
+            this.workerExecutor.shutdown();
+            this.workerExecutor = null;
+        }
 		
 		if(listenerChannel != null){
 			listenerChannel.close();
+            listenerChannel = null;
 		}
 		
 		if(channelFactory != null){
 			channelFactory.releaseExternalResources();
+            channelFactory.shutdown();
+            channelFactory = null;
 		}
 		
 		if(bootstrap != null){
 			bootstrap.releaseExternalResources();
+            bootstrap.shutdown();
+            bootstrap = null;
 		}
-		
-		listenerChannel = null;
-		channelFactory = null;
-		bootstrap = null;
 	}
 
 	@Override

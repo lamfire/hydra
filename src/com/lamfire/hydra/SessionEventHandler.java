@@ -15,7 +15,7 @@ import com.lamfire.utils.Maps;
 
 abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implements Context{
 	private static final Logger LOGGER = Logger.getLogger(SessionEventHandler.class);
-	private final Map<Integer,Session> sessions = Maps.newHashMap();//所有的SESSION
+	private final Map<Integer,Session> sessions = Maps.newHashMap();//所有已连接上的SESSION
 
 	private SessionEventListener sessionEventListener;
 	private MessageHandler messageHandler;
@@ -41,6 +41,9 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 	}
 
     protected synchronized void closeAllSessions(){
+        if(sessions.isEmpty()){
+            return;
+        }
         List<Session> list = new ArrayList<Session>(sessions.values());
         for(Session s : list){
             s.close();
@@ -88,20 +91,6 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		    SessionUtils.onMessageReceived(this,messageHandler, session, message);
         }
 	}
-	
-
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		super.channelConnected(ctx, e);
-		Session session = sessions.get(e.getChannel().getId());
-		SessionUtils.onConnected(this,sessionEventListener, session);
-		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("channelConnected:"+session);
-		}
-			
-	}
-
-
 
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
@@ -113,13 +102,23 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 		}
 	}
 
+    @Override
+    public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        super.channelConnected(ctx, e);
+        Session session = new SessionImpl(e.getChannel());
+        sessions.put(session.getSessionId(), session);
+        SessionUtils.onConnected(this,sessionEventListener, session);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("channelConnected:"+session);
+        }
 
+    }
 
 	@Override
 	public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		super.channelOpen(ctx, e);
 		Session session = new SessionImpl(e.getChannel());
-		sessions.put(session.getSessionId(), session);
+		//sessions.put(session.getSessionId(), session);
 		SessionUtils.onOpen(this,sessionEventListener, session);
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("channelOpen:"+session);

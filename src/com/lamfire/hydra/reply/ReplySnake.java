@@ -1,6 +1,7 @@
 package com.lamfire.hydra.reply;
 
 import com.lamfire.hydra.*;
+import com.lamfire.hydra.exception.HydraException;
 import com.lamfire.logger.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,6 +19,7 @@ public class ReplySnake extends Snake{
     private CycleSessionIterator it;
     private AtomicInteger atimic = new AtomicInteger();
     private OnReceivedPushMessageListener onReceivedPushMessageListener;
+    private long readTimeoutMills = 120000;
 
     public ReplySnake(String host, int port) {
         super(host, port);
@@ -30,12 +32,24 @@ public class ReplySnake extends Snake{
         return session.send(new Message(id, bytes));
     }
 
+    public long getReadTimeoutMills() {
+        return readTimeoutMills;
+    }
+
+    public void setReadTimeoutMills(long readTimeoutMills) {
+        this.readTimeoutMills = readTimeoutMills;
+    }
+
     public byte[] send(byte[] bytes){
         int id = atimic.getAndIncrement();
         try{
             ReplyFuture future = new ReplyFuture(id);
+            future.setReadTimeoutMillis(readTimeoutMills);
             replyQueue.add(future);
             Session session = it.nextAvailableSession();
+            if(session == null){
+                throw new HydraException("No available sessions") ;
+            }
             session.send(new Message(id,bytes)).awaitUninterruptibly();
             byte[] result = future.getReply();
             return result;

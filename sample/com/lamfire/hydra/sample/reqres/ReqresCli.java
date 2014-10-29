@@ -1,7 +1,9 @@
 package com.lamfire.hydra.sample.reqres;
 
+import com.lamfire.hydra.exception.HydraException;
 import com.lamfire.hydra.reply.ReplySnake;
 import com.lamfire.logger.Logger;
+import com.lamfire.utils.Threads;
 
 public class ReqresCli {
 	private static final Logger LOGGER = Logger.getLogger(ReqresCli.class);
@@ -10,6 +12,16 @@ public class ReqresCli {
 	static void usage(){
 		System.out.println("com.lamfire.nkit.sample.ClientSample [host] [port] [connsize]");
 	}
+
+    static void send(ReplySnake snake,byte[] bytes){
+        try{
+            byte[] result = snake.send(bytes);
+            System.out.println(new String(result));
+        }catch (HydraException e){
+            e.printStackTrace();
+            Threads.sleep(5000);
+        }
+    }
 
 	public static void main(String[] args) throws Exception {
 		String host = "127.0.0.1";
@@ -28,15 +40,15 @@ public class ReqresCli {
 		}
 		
 		LOGGER.info("[startup]:"+host + ":" +port  +" - "+ size);
-		ReplySnake cli = new ReplySnake(host,port);
-		cli.setKeepAlive(true);
-        cli.setKeepaliveConnsWithClient(4);
-        cli.setAutoConnectRetry(true);
-		cli.connect();
+		ReplySnake snake = new ReplySnake(host,port);
+        snake.setKeepAlive(true);
+        snake.setKeepaliveConnsWithClient(4);
+        snake.setAutoConnectRetry(true);
+        snake.setReadTimeoutMills(5000);
+        snake.connect();
 
 		for(int i=0;i<10000000;i++){
-			byte[] bytes = cli.send(String.valueOf(i).getBytes());
-			System.out.println(new String(bytes));
+			send(snake,String.valueOf(i).getBytes());
 		}
 	}
 

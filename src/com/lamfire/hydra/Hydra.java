@@ -39,23 +39,13 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	private int maxWaitWithHeartbeat = 5;
 	private boolean keepAlive = false;
 	private boolean autoConnectRetry = false;
-    private ExecutorService bossExecutor;
-    private ExecutorService workerExecutor;
+    private int bossThreads = 2;
+    private int workerThreads = 4;
 
 	public Hydra(String host, int port) {
 		this.host = host;
 		this.port = port;
-		this.heartbeatTask = new HeartbeatTask(this);
-		this.autoConnectTask = new AutoConnectTask(this);
 	}
-
-    public void setBossExecutor(ExecutorService bossExecutor) {
-        this.bossExecutor = bossExecutor;
-    }
-
-    public void setWorkerExecutor(ExecutorService workerExecutor) {
-        this.workerExecutor = workerExecutor;
-    }
 
 	public int getHearbeatIntervalTime() {
 		return hearbeatIntervalTime;
@@ -155,10 +145,16 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 
 	@Override
 	public synchronized Session connect() {
+        if(this.heartbeatTask == null){
+            this.heartbeatTask = new HeartbeatTask(this);
+        }
+        if(autoConnectTask == null){
+            this.autoConnectTask = new AutoConnectTask(this);
+        }
 		if (client == null) {
 			client = new Client(host, port);
-            client.setBossExecutor(bossExecutor);
-            client.setWorkerExecutor(workerExecutor);
+            client.setBossThreads(bossThreads);
+            client.setWorkerThreads(workerThreads);
 			client.setMessageHandler(this);
 			client.setSessionEventListener(this);
 			if(this.autoConnectRetry){
@@ -187,17 +183,28 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 	@Override
 	public void shutdown() {
 		if (client != null) {
+            LOGGER.info("[SHUTDOWN] : Client");
 			client.shutdown();
 			client = null;
 		}
 
 		if (server != null) {
+            LOGGER.info("[SHUTDOWN] : Server");
 			server.shutdown();
 			server = null;
 		}
 
-		autoConnectTask.shutdown();
-		heartbeatTask.shutdown();
+        if(autoConnectTask != null){
+            LOGGER.info("[SHUTDOWN] : AtuoConnectTask" );
+            autoConnectTask.shutdown();
+            autoConnectTask = null;
+        }
+
+        if(heartbeatTask != null){
+            LOGGER.info("[SHUTDOWN] : HeartbeatTask" );
+            heartbeatTask.shutdown();
+            heartbeatTask = null;
+        }
 	}
 
 	@Override
@@ -205,12 +212,19 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		if(server != null){
 			return;
 		}
-		server = new Server(host, port);
-        server.setBossExecutor(bossExecutor);
-        server.setWorkerExecutor(workerExecutor);
-		server.setMessageHandler(this);
-		server.setSessionEventListener(this);
+        if(server == null){
+            server = new Server(host, port);
+            server.setBossThreads(bossThreads);
+            server.setWorkerThreads(workerThreads);
+            server.setMessageHandler(this);
+            server.setSessionEventListener(this);
+        }
+
 		server.bind();
+
+        if(this.heartbeatTask == null){
+            this.heartbeatTask = new HeartbeatTask(this);
+        }
 		heartbeatTask.setSendHeartbeatRequestEnable(false);
 		try {
 			onReady();

@@ -8,6 +8,7 @@ import com.lamfire.logger.Logger;
 class AutoConnectTask extends HydraTask {
 	private static final Logger LOGGER = Logger.getLogger(AutoConnectTask.class);
 	private Hydra hydra;
+    private boolean rebooted = false;
 	private int keepaliveConnections = 1;
 	
 	public AutoConnectTask(Hydra hydra) {
@@ -27,10 +28,20 @@ class AutoConnectTask extends HydraTask {
 		this.keepaliveConnections = keepaliveConnections;
 	}
 
+    private void reboot(){
+        String host = hydra.getHost();
+        int port = hydra.getPort();
+        LOGGER.debug("[REBOOTING]:[" + host + ":" + port + "]");
+        this.hydra.shutdown();
+    }
+
     private void reconnects(int conns){
         try {
             for (int i = 0; i < conns; i++) {
-                hydra.connect();
+                Session session = hydra.connect();
+                if(session.isConnected()){
+                    this.rebooted = false;
+                }
             }
             LOGGER.info("[SUCCESS]:reconnected("+conns+") to [" + hydra.getHost() + ":" + hydra.getPort()+"]");
         }catch (Throwable e){
@@ -44,12 +55,18 @@ class AutoConnectTask extends HydraTask {
 			String host = hydra.getHost();
 			int port = hydra.getPort();
 			int conns = hydra.getSessions().size();
+
+            if(conns == 0 && rebooted == false){
+                reboot();
+                this.rebooted = true;
+            }
+
             if(LOGGER.isDebugEnabled()){
-			    LOGGER.debug("[RECONNECT STATUS]:[" + host + ":" + port + "] connections=" + conns + "/" + keepaliveConnections);
+			    LOGGER.debug("[RECONNECT STATUS]:[" + host + ":" + port + "] connected=" + conns + "/" + keepaliveConnections);
             }
 			if (conns < keepaliveConnections) {
 				int count = keepaliveConnections - conns;
-                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + host + ":" + port + "],connections=" + conns + "/" + keepaliveConnections );
+                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + host + ":" + port + "],connected=" + conns + "/" + keepaliveConnections );
                 if (count > 8) {
 					count /= 3;
 				}

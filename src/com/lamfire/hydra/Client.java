@@ -25,7 +25,8 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
     private ExecutorService workerExecutor;
 	private String host;
 	private int port;
-	private boolean shutdowning = false;
+	private int bossThreads = 2;
+    private int workerThreads = 4;
 
 	public Client(String host, int port) {
         this.host = host;
@@ -42,18 +43,15 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 		this.setMessageHandler(handler);
 	}
 
-	public synchronized Session connect() {
-		if(shutdowning){
-			throw new RuntimeException("The client was shutdown,cannot open new connection.");
-		}
+	public Session connect() {
 		LOGGER.debug(String.format("Connecting to %s:%d", host, port));
 
 
         if(bossExecutor == null){
-            bossExecutor = Executors.newCachedThreadPool();
+            bossExecutor = Executors.newFixedThreadPool(bossThreads);
         }
         if(workerExecutor == null){
-            workerExecutor = Executors.newFixedThreadPool(4);
+            workerExecutor = Executors.newFixedThreadPool(workerThreads);
         }
 
         if(channelFactory == null){
@@ -75,15 +73,23 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 		return new SessionImpl(channel);
 	}
 
-    public void setBossExecutor(ExecutorService bossExecutor) {
-        this.bossExecutor = bossExecutor;
+    public int getBossThreads() {
+        return bossThreads;
     }
 
-    public void setWorkerExecutor(ExecutorService workerExecutor) {
-        this.workerExecutor = workerExecutor;
+    public void setBossThreads(int bossThreads) {
+        this.bossThreads = bossThreads;
     }
 
-	public ChannelPipeline getPipeline() throws Exception {
+    public int getWorkerThreads() {
+        return workerThreads;
+    }
+
+    public void setWorkerThreads(int workerThreads) {
+        this.workerThreads = workerThreads;
+    }
+
+    public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline pipeline = Channels.pipeline();
 		pipeline.addLast("decoder", new HydraMessageDecoder());
 		pipeline.addLast("encoder", new HydraMessageEncoder());
@@ -91,13 +97,33 @@ public class Client extends SessionEventHandler implements ChannelPipelineFactor
 		return pipeline;
 	}
 
-	public synchronized void shutdown() {
+	public void shutdown() {
 		super.shutdown();
-		this.shutdowning = true;
-		this.channelFactory.releaseExternalResources();
-		this.bootstrap.releaseExternalResources();
-		this.channelFactory = null;
-		this.bootstrap = null;
+        if(this.bossExecutor != null){
+            LOGGER.info("[SHUTDOWN] : shutdown boss executor");
+            this.bossExecutor.shutdown();;
+            this.bossExecutor = null;
+        }
+
+        if(this.workerExecutor != null){
+            LOGGER.info("[SHUTDOWN] : shutdown worker executor");
+            this.workerExecutor.shutdown();
+            this.workerExecutor = null;
+        }
+
+        if(channelFactory != null){
+            LOGGER.info("[SHUTDOWN] : shutdown channel factory");
+            this.channelFactory.releaseExternalResources();
+            this.channelFactory.shutdown();
+            this.channelFactory = null;
+        }
+
+        if(bootstrap != null){
+            LOGGER.info("[SHUTDOWN] : shutdown client bootstrap");
+		    this.bootstrap.releaseExternalResources();
+            this.bootstrap.shutdown();
+		    this.bootstrap = null;
+        }
 	}
 
 	@Override

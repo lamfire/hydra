@@ -50,5 +50,6 @@ abstract class HydraTask implements Runnable{
 			return;
 		}
 		schedule.shutdown();
+        schedule = null;
 	}
 }

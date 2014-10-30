@@ -23,7 +23,8 @@ public class EchoCli {
 		executor.setKeepaliveConnsWithClient(size);
 
 		
-		Session session = executor.connect();
+		executor.connect();
+        Session session = executor.awaitAvailableSession();
 		session.send(new Message(1001,"123456".getBytes()));
 	}
 	

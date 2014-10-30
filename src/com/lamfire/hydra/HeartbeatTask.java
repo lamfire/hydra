@@ -55,8 +55,12 @@ class HeartbeatTask extends HydraTask {
 
 	private void heartbeatCheck(){
 		Collection<Session> sessions = hydra.getSessions();
+        if(sessions.isEmpty()){
+            LOGGER.debug("["+getName()+"] : Available sessions not found - " + hydra );
+            return;
+        }
         if(LOGGER.isDebugEnabled()){
-		    LOGGER.debug("["+getName()+"] : Found alive sessions("+sessions.size()+")");
+		    LOGGER.debug("["+getName()+"] :  Check sessions("+sessions.size()+") - " + hydra);
         }
 		try{
 			for(Session session : sessions){
@@ -73,7 +77,7 @@ class HeartbeatTask extends HydraTask {
 				}
 			}
 		}catch(Throwable e){
-			LOGGER.warn("["+getName()+"] :"+e.getMessage());
+			LOGGER.warn("["+getName()+"] :"+e.getMessage() +" - " + hydra);
 		}
 	}
 

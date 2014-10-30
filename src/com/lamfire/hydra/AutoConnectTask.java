@@ -1,80 +1,76 @@
 package com.lamfire.hydra;
 
 import com.lamfire.logger.Logger;
+import com.lamfire.utils.Sets;
+
+import java.util.Set;
 
 /**
  * 自动重连任务
  */
 class AutoConnectTask extends HydraTask {
 	private static final Logger LOGGER = Logger.getLogger(AutoConnectTask.class);
-	private Hydra hydra;
-    private boolean rebooted = false;
-	private int keepaliveConnections = 1;
-	
-	public AutoConnectTask(Hydra hydra) {
-		super("AUTOCONNECT");
-		this.hydra = hydra;
-	}
-	
-	
 
-	public int getKeepaliveConnections() {
-		return keepaliveConnections;
-	}
+    private static final AutoConnectTask instance = new AutoConnectTask();
 
-
-
-	public void setKeepaliveConnections(int keepaliveConnections) {
-		this.keepaliveConnections = keepaliveConnections;
-	}
-
-    private void reboot(){
-        String host = hydra.getHost();
-        int port = hydra.getPort();
-        LOGGER.debug("[REBOOTING]:[" + host + ":" + port + "]");
-        this.hydra.shutdown();
+    public static AutoConnectTask getInstance(){
+        return instance;
     }
 
-    private void reconnects(int conns){
+	private final Set<Hydra> hydras = Sets.newHashSet();
+
+	private AutoConnectTask() {
+		super("AUTOCONNECT");
+	}
+
+    public void add(Hydra hydra){
+         hydras.add(hydra);
+    }
+
+    public void remove(Hydra hydra){
+        hydras.remove(hydra);
+    }
+
+    private void reconnects(Hydra hydra ,int conns){
         try {
             for (int i = 0; i < conns; i++) {
-                Session session = hydra.connect();
-                if(session.isConnected()){
-                    this.rebooted = false;
-                }
+                hydra.connect();
             }
-            LOGGER.info("[SUCCESS]:reconnected("+conns+") to [" + hydra.getHost() + ":" + hydra.getPort()+"]");
+            LOGGER.info("[SUCCESS] : Auto reconnected("+conns+") to [" + hydra+"]");
         }catch (Throwable e){
-            LOGGER.error("[FAILED]:"+e.getMessage());
+            LOGGER.error("[FAILED] : "+e.getMessage() +" - " + hydra,e);
         }
     }
 
-	@Override
-	public void run() {
+
+	public void executeTask(Hydra hydra) {
 		try {
 			String host = hydra.getHost();
 			int port = hydra.getPort();
 			int conns = hydra.getSessions().size();
-
-            if(conns == 0 && rebooted == false){
-                reboot();
-                this.rebooted = true;
-            }
+            int  keepaliveConnections = hydra.getKeepaliveConnsWithClient();
 
             if(LOGGER.isDebugEnabled()){
-			    LOGGER.debug("[RECONNECT STATUS]:[" + host + ":" + port + "] connected=" + conns + "/" + keepaliveConnections);
+			    LOGGER.debug("[RECONNECT STATUS]:[" + hydra + "] connected=" + conns + "/" + keepaliveConnections);
             }
 			if (conns < keepaliveConnections) {
 				int count = keepaliveConnections - conns;
-                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + host + ":" + port + "],connected=" + conns + "/" + keepaliveConnections );
+                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + hydra + "],connected=" + conns + "/" + keepaliveConnections );
                 if (count > 8) {
 					count /= 3;
 				}
-				reconnects(count);
+				reconnects(hydra ,count);
 			}
 		} catch (Throwable e) {
-			LOGGER.error("[EXCEPTION]:"+e.getMessage());
+			LOGGER.error("[EXCEPTION]:"+e.getMessage() +" - " + hydra);
 		}
 	}
+
+    @Override
+    public void run() {
+         for(Hydra hydra : hydras){
+             executeTask(hydra);
+         }
+    }
 
 }

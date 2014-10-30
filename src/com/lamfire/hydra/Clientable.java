@@ -1,6 +1,6 @@
 package com.lamfire.hydra;
 
 public interface Clientable {
-	public Session connect();
+	public void connect();
 	public void shutdown() ;
 }

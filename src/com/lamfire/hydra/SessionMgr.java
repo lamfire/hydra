@@ -1,6 +1,5 @@
 package com.lamfire.hydra;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 
 import org.jboss.netty.channel.Channel;
@@ -13,12 +12,17 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import com.lamfire.logger.Logger;
 import com.lamfire.utils.Maps;
 
-abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implements Context{
-	private static final Logger LOGGER = Logger.getLogger(SessionEventHandler.class);
+abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Context{
+	private static final Logger LOGGER = Logger.getLogger(SessionMgr.class);
 	private final Map<Integer,Session> sessions = Maps.newHashMap();//所有已连接上的SESSION
-
+    private final Object SESSION_WAIT_LOCK = 1;
+    private final CycleSessionIterator cycleSessionIterator;
 	private SessionEventListener sessionEventListener;
 	private MessageHandler messageHandler;
+
+    public SessionMgr(){
+        cycleSessionIterator = new CycleSessionIterator(this);
+    }
 
 	public void setSessionEventListener(SessionEventListener listener){
 		this.sessionEventListener = listener;
@@ -39,6 +43,32 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
 	public Collection<Session> getSessions(){
         return Collections.unmodifiableCollection(sessions.values());
 	}
+
+    public Session awaitAvailableSession(){
+        Session session = null;
+        synchronized (SESSION_WAIT_LOCK){
+            while(session == null){
+                session = cycleSessionIterator.nextAvailableSession();
+                if(session == null){
+                    try {
+                        SESSION_WAIT_LOCK.wait();
+                    } catch (InterruptedException e) {
+                        LOGGER.warn(e.getMessage(),e);
+                    }
+                }
+            }
+        }
+        return session;
+    }
+
+    private Session makeSession(Channel channel){
+        Session session = new SessionImpl(channel);
+        synchronized (SESSION_WAIT_LOCK){
+            sessions.put(session.getSessionId(), session);
+            SESSION_WAIT_LOCK.notifyAll();
+        }
+        return session;
+    }
 
     protected synchronized void closeAllSessions(){
         if(sessions.isEmpty()){
@@ -105,8 +135,7 @@ abstract class SessionEventHandler extends SimpleChannelUpstreamHandler implemen
     @Override
     public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
         super.channelConnected(ctx, e);
-        Session session = new SessionImpl(e.getChannel());
-        sessions.put(session.getSessionId(), session);
+        Session session = makeSession(ctx.getChannel());
         SessionUtils.onConnected(this,sessionEventListener, session);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("channelConnected:"+session);

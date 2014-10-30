@@ -12,7 +12,9 @@ public class ClientTest extends Client implements MessageHandler {
 	public static void main(String[] args) {
 		ClientTest test= new ClientTest("127.0.0.1",1200);
 		test.setMessageHandler(test);
-		Session s = test.connect();
+		test.connect();
+
+        Session s = test.awaitAvailableSession();
 		byte[] bytes = "heelo lamfire".getBytes();
 
         Message message = new Message(0,bytes);

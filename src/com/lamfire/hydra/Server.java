@@ -1,8 +1,6 @@
 package com.lamfire.hydra;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -14,17 +12,13 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.lamfire.logger.Logger;
 
-public class Server extends SessionEventHandler implements ChannelPipelineFactory{
+public class Server extends SessionMgr implements ChannelPipelineFactory{
 	private static final Logger LOGGER = Logger.getLogger(Server.class);
 
-    private ExecutorService bossExecutor;
-    private ExecutorService workerExecutor;
+    private HydraExecutorMgr executorMgr = HydraExecutorMgr.getInstance();
 	private ServerBootstrap bootstrap = null;
 	private ChannelFactory channelFactory= null;
 	private Channel listenerChannel = null;
-
-    private int bossThreads = 2;
-    private int workerThreads = 4;
 
 	private String bind;
 	private int port;
@@ -44,33 +38,11 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 		this.setSessionEventListener(listener);
 	}
 
-    public int getBossThreads() {
-        return bossThreads;
-    }
-
-    public void setBossThreads(int bossThreads) {
-        this.bossThreads = bossThreads;
-    }
-
-    public int getWorkerThreads() {
-        return workerThreads;
-    }
-
-    public void setWorkerThreads(int workerThreads) {
-        this.workerThreads = workerThreads;
-    }
-
     public void bind(){
 		if(listenerChannel != null){
 			return ;
 		}
-        if(bossExecutor == null){
-            bossExecutor = Executors.newFixedThreadPool(bossThreads);
-        }
-        if(workerExecutor == null){
-            workerExecutor = Executors.newFixedThreadPool(workerThreads);
-        }
-		channelFactory = new NioServerSocketChannelFactory(bossExecutor,workerExecutor);
+		channelFactory = new NioServerSocketChannelFactory(executorMgr.getIoBossExecutor(),executorMgr.getIoWorkerExecutor());
 		bootstrap = new ServerBootstrap(channelFactory);
 		
 		// Set up the default event pipeline.
@@ -86,29 +58,17 @@ public class Server extends SessionEventHandler implements ChannelPipelineFactor
 	public void shutdown(){
 		super.shutdown();
 
-        if(this.bossExecutor != null){
-            this.bossExecutor.shutdown();;
-            this.bossExecutor = null;
-        }
-
-        if(this.workerExecutor != null){
-            this.workerExecutor.shutdown();
-            this.workerExecutor = null;
-        }
-		
 		if(listenerChannel != null){
 			listenerChannel.close();
             listenerChannel = null;
 		}
 		
 		if(channelFactory != null){
-			channelFactory.releaseExternalResources();
             channelFactory.shutdown();
             channelFactory = null;
 		}
 		
 		if(bootstrap != null){
-			bootstrap.releaseExternalResources();
             bootstrap.shutdown();
             bootstrap = null;
 		}

@@ -10,7 +10,7 @@ public class ReqresCli {
 
 
 	static void usage(){
-		System.out.println("com.lamfire.nkit.sample.ClientSample [host] [port] [connsize]");
+		System.out.println(ReqresCli.class.getName() +" [host] [port] [connsize]");
 	}
 
     static void send(ReplySnake snake,byte[] bytes){
@@ -42,7 +42,7 @@ public class ReqresCli {
 		LOGGER.info("[startup]:"+host + ":" +port  +" - "+ size);
 		ReplySnake snake = new ReplySnake(host,port);
         snake.setKeepAlive(true);
-        snake.setKeepaliveConnsWithClient(4);
+        snake.setKeepaliveConnsWithClient(1);
         snake.setAutoConnectRetry(true);
         snake.setReadTimeoutMills(5000);
         snake.connect();

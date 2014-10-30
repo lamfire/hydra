@@ -16,19 +16,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ReplySnake extends Snake{
     private static final Logger LOGGER = Logger.getLogger(ReplySnake.class);
     private ReplyWaitQueue replyQueue = new ReplyWaitQueue();
-    private CycleSessionIterator it;
     private AtomicInteger atimic = new AtomicInteger();
     private OnReceivedPushMessageListener onReceivedPushMessageListener;
     private long readTimeoutMills = 120000;
 
     public ReplySnake(String host, int port) {
         super(host, port);
-        it = new CycleSessionIterator(this);
     }
 
     public Future sendOnly(byte[] bytes){
         int id = atimic.getAndIncrement();
-        Session session = it.nextAvailableSession();
+        Session session =awaitAvailableSession();
+        if(session == null){
+            throw new HydraException("No available sessions") ;
+        }
         return session.send(new Message(id, bytes));
     }
 
@@ -46,7 +47,7 @@ public class ReplySnake extends Snake{
             ReplyFuture future = new ReplyFuture(id);
             future.setReadTimeoutMillis(readTimeoutMills);
             replyQueue.add(future);
-            Session session = it.nextAvailableSession();
+            Session session = awaitAvailableSession();
             if(session == null){
                 throw new HydraException("No available sessions") ;
             }
@@ -64,7 +65,7 @@ public class ReplySnake extends Snake{
             ReplyFuture future = new ReplyFuture(id);
             future.setReadTimeoutMillis(timeout);
             replyQueue.add(future);
-            Session session = it.nextAvailableSession();
+            Session session = awaitAvailableSession();
             session.send(new Message(id,bytes)).awaitUninterruptibly();
             byte[] result = future.getReply();
             return result;

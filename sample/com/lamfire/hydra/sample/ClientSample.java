@@ -24,8 +24,9 @@ public class ClientSample {
 		final Snake executor = new IdentitySnake(mapper,host, port);
 		executor.setKeepaliveConnsWithClient(size);
 		//connect
+        executor.connect();
 		for(int i=0;i<size;i++){
-			Session session = executor.connect();
+			Session session = executor.getPollerSessionIterator().next();
 			//for(int n=0;n<100;n++){
 			session.send(new Message(1001,ManagementFactory.getRuntimeMXBean().getName().getBytes()));
 			//}

@@ -1,6 +1,7 @@
 package com.lamfire.hydra;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
@@ -39,7 +40,7 @@ public class Client extends SessionMgr implements ChannelPipelineFactory, Client
 	public void connect() {
 		LOGGER.debug(String.format("Connecting to %s:%d", host, port));
         if(channelFactory == null){
-            channelFactory = new NioClientSocketChannelFactory(executorMgr.getIoBossExecutor(), executorMgr.getIoWorkerExecutor());
+            channelFactory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
         }
         if(bootstrap == null){
             bootstrap = new ClientBootstrap(channelFactory);
@@ -62,13 +63,15 @@ public class Client extends SessionMgr implements ChannelPipelineFactory, Client
 	public void shutdown() {
 		super.shutdown();
         if(channelFactory != null){
-            LOGGER.debug("[SHUTDOWN] : shutdown channel factory");
+            LOGGER.debug("[SHUTDOWN] : Shutdown channel factory");
+            channelFactory.releaseExternalResources();
             this.channelFactory.shutdown();
             this.channelFactory = null;
         }
 
         if(bootstrap != null){
-            LOGGER.debug("[SHUTDOWN] : shutdown client bootstrap");
+            LOGGER.debug("[SHUTDOWN] : Shutdown client bootstrap");
+            bootstrap.releaseExternalResources();
             this.bootstrap.shutdown();
 		    this.bootstrap = null;
         }

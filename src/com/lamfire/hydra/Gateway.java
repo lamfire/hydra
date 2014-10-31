@@ -33,9 +33,7 @@ public class Gateway extends Hydra {
 			LOGGER.warn("The 'Bus' not found,received message was be igrone.");
 			return;
 		}
-
 		bus.onRouterMessage(session, message);
-		
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("[Gateway] onMessageReceived:"+message);
 		}

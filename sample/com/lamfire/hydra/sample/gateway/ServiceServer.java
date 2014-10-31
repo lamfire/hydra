@@ -1,4 +1,4 @@
-package com.lamfire.hydra.sample;
+package com.lamfire.hydra.sample.gateway;
 
 import com.lamfire.hydra.*;
 import com.lamfire.hydra.Message;
@@ -19,6 +19,8 @@ public class ServiceServer {
 			
 		});
 		Snake executor = new IdentitySnake(mapper,host, port);
+        executor.setAutoConnectRetry(true);
+        executor.setKeepAlive(true);
 		executor.connect();
 	}
 	

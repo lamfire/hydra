@@ -1,6 +1,7 @@
 package com.lamfire.hydra;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -42,7 +43,7 @@ public class Server extends SessionMgr implements ChannelPipelineFactory{
 		if(listenerChannel != null){
 			return ;
 		}
-		channelFactory = new NioServerSocketChannelFactory(executorMgr.getIoBossExecutor(),executorMgr.getIoWorkerExecutor());
+		channelFactory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
 		bootstrap = new ServerBootstrap(channelFactory);
 		
 		// Set up the default event pipeline.
@@ -59,16 +60,21 @@ public class Server extends SessionMgr implements ChannelPipelineFactory{
 		super.shutdown();
 
 		if(listenerChannel != null){
+            LOGGER.debug("[SHUTDOWN] : Closing listener channel");
 			listenerChannel.close();
             listenerChannel = null;
 		}
 		
 		if(channelFactory != null){
+            LOGGER.debug("[SHUTDOWN] : Shutdown channel factory");
+            channelFactory.releaseExternalResources();
             channelFactory.shutdown();
             channelFactory = null;
 		}
 		
 		if(bootstrap != null){
+            LOGGER.debug("[SHUTDOWN] : Shutdown bootstrap");
+            bootstrap.releaseExternalResources();
             bootstrap.shutdown();
             bootstrap = null;
 		}

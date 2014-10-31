@@ -1,4 +1,4 @@
-package com.lamfire.hydra.sample;
+package com.lamfire.hydra.sample.gateway;
 
 import java.lang.management.ManagementFactory;
 
@@ -8,8 +8,8 @@ import com.lamfire.logger.Logger;
 import com.lamfire.hydra.Snake;
 import com.lamfire.hydra.Session;
 
-public class ClientSample {
-	private static final Logger LOGGER = Logger.getLogger(ClientSample.class);
+public class Client {
+	private static final Logger LOGGER = Logger.getLogger(Client.class);
 	
 	public static void startup(String host,int port,int size){	
 		MessageMapper mapper = new MessageMapper();
@@ -23,15 +23,24 @@ public class ClientSample {
 		
 		final Snake executor = new IdentitySnake(mapper,host, port);
 		executor.setKeepaliveConnsWithClient(size);
+        executor.setAutoConnectRetry(true);
+        executor.setKeepAlive(true);
 		//connect
         executor.connect();
 		for(int i=0;i<size;i++){
-			Session session = executor.getPollerSessionIterator().next();
-			//for(int n=0;n<100;n++){
-			session.send(new Message(1001,ManagementFactory.getRuntimeMXBean().getName().getBytes()));
+			send(executor, 1001, ManagementFactory.getRuntimeMXBean().getName().getBytes());
 			//}
 		}
 	}
+
+    static void send(Snake snake,int id,byte[] bytes){
+        try{
+            Session session = snake.awaitAvailableSession();
+            session.send(new Message(id,bytes));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 	
 	static void usage(){
 		System.out.println("com.lamfire.nkit.sample.ClientSample [host] [port] [connsize]");

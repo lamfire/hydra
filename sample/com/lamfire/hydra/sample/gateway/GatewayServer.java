@@ -1,10 +1,10 @@
-package com.lamfire.hydra.sample;
+package com.lamfire.hydra.sample.gateway;
 
 import com.lamfire.hydra.*;
 import com.lamfire.hydra.HydraDestination;
 import com.lamfire.utils.StringUtils;
 
-public class ConnectionGateway {
+public class GatewayServer {
 
 	static void usage(){
 		System.out.println("com.lamfire.nkit.sample.ConnectionGateway [host] [port] [bind|connect]");
@@ -26,7 +26,7 @@ public class ConnectionGateway {
 			action = (args[2]);
 		}
 		
-		Gateway gateway = new Gateway(host,port);
+		com.lamfire.hydra.Gateway gateway = new com.lamfire.hydra.Gateway(host,port);
 		gateway.setHearbeatIntervalTime(30);
 		gateway.setMaxWaitWithHeartbeat(3);
 		

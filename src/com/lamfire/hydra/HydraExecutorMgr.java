@@ -17,13 +17,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 public class HydraExecutorMgr {
     private static final Logger LOGGER = Logger.getLogger(HydraExecutorMgr.class);
-    private int _IoBossThreads = 1;
-    private int _IoWorkerThreads = 4;
     private int _ServiceThreads = 4;
     private int _ScheduledTaskThreads = 1;
 
-    private ExecutorService _IoBossExecutor;
-    private ExecutorService _IoWorkerExecutor;
     private ExecutorService _ServiceExecutor;
     private ScheduledThreadPoolExecutor _ScheduledExecutor;
 
@@ -37,14 +33,6 @@ public class HydraExecutorMgr {
 
     }
 
-    public int getIoBossThreads() {
-        return _IoBossThreads;
-    }
-
-    public int getIoWorkerThreads() {
-        return _IoWorkerThreads;
-    }
-
     public int getServiceThreads() {
         return _ServiceThreads;
     }
@@ -53,36 +41,12 @@ public class HydraExecutorMgr {
         return _ScheduledTaskThreads;
     }
 
-    public void setIoBossThreads(int ioBossThreads) {
-        this._IoBossThreads = ioBossThreads;
-    }
-
     public void setServiceThreads(int serviceThreads) {
         this._ServiceThreads = serviceThreads;
     }
 
-    public void setIoWorkerThreads(int ioWorkerThreads) {
-        this._IoWorkerThreads = ioWorkerThreads;
-    }
-
     public void setScheduledTaskThreads(int scheduledTaskThreads) {
         this._ScheduledTaskThreads = scheduledTaskThreads;
-    }
-
-    synchronized ExecutorService getIoBossExecutor() {
-        if(_IoBossExecutor == null){
-            LOGGER.info("[CREATE_EXECUTOR] : Create IO boss executor - " + _IoBossThreads);
-            _IoBossExecutor = Executors.newFixedThreadPool(_IoBossThreads, Threads.makeThreadFactory("BOSS"));
-        }
-        return _IoBossExecutor;
-    }
-
-    synchronized ExecutorService getIoWorkerExecutor() {
-        if(_IoWorkerExecutor == null){
-            LOGGER.info("[CREATE_EXECUTOR] : Create IO worker executor - " + _IoWorkerThreads);
-            _IoWorkerExecutor = Executors.newFixedThreadPool(_IoWorkerThreads, Threads.makeThreadFactory("WORKER"));
-        }
-        return _IoWorkerExecutor;
     }
 
     synchronized ExecutorService getServiceExecutor() {
@@ -99,22 +63,6 @@ public class HydraExecutorMgr {
             _ScheduledExecutor = (ScheduledThreadPoolExecutor)Executors.newScheduledThreadPool(_ScheduledTaskThreads,new ThreadFactory("HYDRA_SCHEDULE_TASK"));
         }
         return _ScheduledExecutor;
-    }
-
-    public void shutdownIoBossExecutor(){
-        if(this._IoBossExecutor != null){
-            LOGGER.info("[SHUTDOWN] : Shutdown IO boss executor");
-            this._IoBossExecutor.shutdown();;
-            this._IoBossExecutor = null;
-        }
-    }
-
-    public void shutdownIoWorkerExecutor(){
-        if(this._IoWorkerExecutor != null){
-            LOGGER.info("[SHUTDOWN] : Shutdown IO worker executor");
-            this._IoWorkerExecutor.shutdown();
-            this._IoWorkerExecutor = null;
-        }
     }
 
     public void shutdownServiceExecutor(){
@@ -135,8 +83,6 @@ public class HydraExecutorMgr {
 
     public void shutdownAll(){
         shutdownScheduledExecutor();
-        shutdownIoBossExecutor() ;
-        shutdownIoWorkerExecutor();
         shutdownServiceExecutor();
     }
 }

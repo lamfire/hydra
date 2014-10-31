@@ -1,4 +1,4 @@
-package com.lamfire.hydra.sample.reqres;
+package com.lamfire.hydra.sample.reply;
 
 import com.lamfire.hydra.exception.HydraException;
 import com.lamfire.hydra.reply.ReplySnake;

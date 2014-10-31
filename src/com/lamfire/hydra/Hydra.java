@@ -263,7 +263,7 @@ public abstract class Hydra implements MessageHandler,SessionEventListener , Cli
 		return null;
 	}
 	
-	public CycleSessionIterator getPollerSessionIterator(){
+	public CycleSessionIterator getSessionIterator(){
         lock.lock();
         try{
             if(cycleSessionIterator != null){

@@ -62,13 +62,13 @@ public class Client extends SessionMgr implements ChannelPipelineFactory, Client
 	public void shutdown() {
 		super.shutdown();
         if(channelFactory != null){
-            LOGGER.info("[SHUTDOWN] : shutdown channel factory");
+            LOGGER.debug("[SHUTDOWN] : shutdown channel factory");
             this.channelFactory.shutdown();
             this.channelFactory = null;
         }
 
         if(bootstrap != null){
-            LOGGER.info("[SHUTDOWN] : shutdown client bootstrap");
+            LOGGER.debug("[SHUTDOWN] : shutdown client bootstrap");
             this.bootstrap.shutdown();
 		    this.bootstrap = null;
         }
@@ -77,6 +77,6 @@ public class Client extends SessionMgr implements ChannelPipelineFactory, Client
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		super.channelConnected(ctx, e);
-		LOGGER.debug("Connected to " + host +":" + port);
+		LOGGER.debug("[CHANNEL_CONNECTED] : Connected to " + host +":" + port);
 	}
 }

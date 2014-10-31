@@ -3,7 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.18.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/netty-3.7.0.Final.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/lamfire-2.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lamfire-2.2.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -128,7 +128,7 @@ abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Contex
 		Session session = sessions.get(e.getChannel().getId());
 		SessionUtils.onDisconnected(this,sessionEventListener, session);
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("channelDisconnected:"+session);
+			LOGGER.debug("[CHANNEL_DISCONNECTED] : "+session);
 		}
 	}
 
@@ -138,7 +138,7 @@ abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Contex
         Session session = makeSession(ctx.getChannel());
         SessionUtils.onConnected(this,sessionEventListener, session);
         if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("channelConnected:"+session);
+            LOGGER.debug("[CHANNEL_CONNECTED] : "+session);
         }
 
     }
@@ -150,7 +150,7 @@ abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Contex
 		//sessions.put(session.getSessionId(), session);
 		SessionUtils.onOpen(this,sessionEventListener, session);
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("channelOpen:"+session);
+			LOGGER.debug("[CHANNEL_OPEN] : "+session);
 		}
 	}
 
@@ -167,7 +167,7 @@ abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Contex
         }
 		SessionUtils.onClosed(this,sessionEventListener, session);
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("channelClosed:"+session);
+			LOGGER.debug("[CHANNEL_CLOSED] : "+session);
 		}
 	}
 
@@ -176,7 +176,7 @@ abstract class SessionMgr extends SimpleChannelUpstreamHandler implements Contex
 		Session session = sessions.get(e.getChannel().getId());
 		SessionUtils.onExceptionCaught(this,sessionEventListener, session,e.getCause());
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("exceptionCaught:"+session,e.getCause());
+			LOGGER.debug("[EXCEPTION_CAUGHT] : channel="+session,e.getCause());
 		}
 	}
 }

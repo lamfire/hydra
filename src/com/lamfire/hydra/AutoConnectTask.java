@@ -36,7 +36,6 @@ class AutoConnectTask extends HydraTask {
             for (int i = 0; i < conns; i++) {
                 hydra.connect();
             }
-            LOGGER.info("[SUCCESS] : Auto reconnected("+conns+") to [" + hydra+"]");
         }catch (Throwable e){
             LOGGER.error("[FAILED] : "+e.getMessage() +" - " + hydra,e);
         }
@@ -45,17 +44,15 @@ class AutoConnectTask extends HydraTask {
 
 	public void executeTask(Hydra hydra) {
 		try {
-			String host = hydra.getHost();
-			int port = hydra.getPort();
 			int conns = hydra.getSessions().size();
             int  keepaliveConnections = hydra.getKeepaliveConnsWithClient();
 
             if(LOGGER.isDebugEnabled()){
-			    LOGGER.debug("[RECONNECT STATUS]:[" + hydra + "] connected=" + conns + "/" + keepaliveConnections);
+			    LOGGER.debug("[STATUS]:[" + hydra + "] connected=" + conns + "/" + keepaliveConnections);
             }
 			if (conns < keepaliveConnections) {
 				int count = keepaliveConnections - conns;
-                LOGGER.info("[RECONNECTING]:Try to reconnect to [" + hydra + "],connected=" + conns + "/" + keepaliveConnections );
+                LOGGER.info("Trying to connect to [" + hydra + "],connected=" + conns + "/" + keepaliveConnections );
                 if (count > 8) {
 					count /= 3;
 				}

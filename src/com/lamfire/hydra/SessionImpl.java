@@ -148,14 +148,15 @@ public class SessionImpl implements Session, Comparable<Session> {
 		return channel.isWritable();
 	}
 
-	public String toString() {
-		try {
-			String s = this.getRemoteAddress().toString() + "/" + this.getSessionId();
-			return s;
-		} catch (Exception e) {
-			return super.toString();
-		}
-	}
+    @Override
+    public String toString() {
+        try {
+            String s = this.getRemoteAddress().toString() + "/" + this.getSessionId();
+            return s;
+        } catch (Exception e) {
+            return super.toString();
+        }
+    }
 
 	@Override
 	public int compareTo(Session o) {
@@ -179,4 +180,5 @@ public class SessionImpl implements Session, Comparable<Session> {
 		ChannelFuture future = Channels.write(channel, HeatbeatType.Reply);
 		return new Future(this, future);
 	}
+
 }
